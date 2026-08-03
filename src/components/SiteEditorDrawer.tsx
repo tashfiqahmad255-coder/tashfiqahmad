@@ -73,6 +73,25 @@ export default function SiteEditorDrawer() {
     }
   }, [activeEditorTarget]);
 
+  // Listen for Ctrl+Shift+E / Cmd+Shift+E shortcut to toggle private owner access
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
+        e.preventDefault();
+        const unlocked = sessionStorage.getItem('tashfiq_editor_unlocked') === 'true';
+        if (unlocked) {
+          setIsOpen((prev) => !prev);
+        } else {
+          setShowPasskeyModal(true);
+          setPasskeyError(null);
+          setPasskeyInput('');
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Private Access Authentication State
   const [isUnlocked, setIsUnlocked] = useState(() => {
     return sessionStorage.getItem('tashfiq_editor_unlocked') === 'true';
@@ -1530,13 +1549,26 @@ export default function SiteEditorDrawer() {
 
               {/* FOOTER BAR */}
               <div className="px-6 py-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400 shrink-0">
-                <span>⚡ Live Editing Mode Enabled</span>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg transition"
-                >
-                  Done Editing
-                </button>
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Editing Mode Active
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleLockEditor}
+                    className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold rounded-lg transition border border-amber-500/30 flex items-center gap-1.5"
+                  >
+                    <Lock size={12} /> Lock Session
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg transition"
+                  >
+                    Done Editing
+                  </button>
+                </div>
               </div>
 
             </motion.div>
