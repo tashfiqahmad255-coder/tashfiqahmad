@@ -324,28 +324,44 @@ export default function SiteEditorDrawer() {
     }
   };
 
+  // Determine if floating edit button should be visible (hidden on public deployments unless owner unlocks or uses ?edit=true or shortcut)
+  const isPrivateOwnerEnv = React.useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    const href = window.location.href;
+    const hostname = window.location.hostname;
+    return (
+      hostname.includes('ais-dev') ||
+      hostname.includes('localhost') ||
+      href.includes('edit=true') ||
+      href.includes('admin=true') ||
+      isUnlocked
+    );
+  }, [isUnlocked]);
+
   return (
     <>
-      {/* FLOATING CORNER EDIT BUTTON - STRICTLY AT BOTTOM LEFT */}
-      <div className="fixed bottom-5 left-5 z-50">
-        <motion.button
-          id="btn-open-site-editor"
-          onClick={handleOpenEditorClick}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-950/90 border border-emerald-500/50 hover:border-emerald-400 text-white font-mono text-xs font-bold shadow-[0_10px_30px_rgba(16,185,129,0.3)] backdrop-blur-xl transition-all duration-300"
-        >
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          {isUnlocked ? (
-            <Edit3 size={15} className="text-emerald-400 group-hover:rotate-12 transition-transform duration-300" />
-          ) : (
-            <Lock size={15} className="text-amber-400 group-hover:scale-110 transition-transform duration-300" />
-          )}
-          <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 bg-clip-text text-transparent uppercase tracking-wider">
-            {isOpen ? 'Close Editor' : isUnlocked ? 'Edit Website' : 'Edit Website (Private)'}
-          </span>
-        </motion.button>
-      </div>
+      {/* FLOATING CORNER EDIT BUTTON - ONLY VISIBLE TO OWNER / DEV ENVIRONMENT */}
+      {isPrivateOwnerEnv && (
+        <div className="fixed bottom-5 left-5 z-50">
+          <motion.button
+            id="btn-open-site-editor"
+            onClick={handleOpenEditorClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-950/90 border border-emerald-500/50 hover:border-emerald-400 text-white font-mono text-xs font-bold shadow-[0_10px_30px_rgba(16,185,129,0.3)] backdrop-blur-xl transition-all duration-300"
+          >
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            {isUnlocked ? (
+              <Edit3 size={15} className="text-emerald-400 group-hover:rotate-12 transition-transform duration-300" />
+            ) : (
+              <Lock size={15} className="text-amber-400 group-hover:scale-110 transition-transform duration-300" />
+            )}
+            <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 bg-clip-text text-transparent uppercase tracking-wider">
+              {isOpen ? 'Close Editor' : isUnlocked ? 'Edit Website' : 'Edit Website (Private)'}
+            </span>
+          </motion.button>
+        </div>
+      )}
 
       {/* PRIVATE OWNER PASSKEY LOCK MODAL */}
       <AnimatePresence>
