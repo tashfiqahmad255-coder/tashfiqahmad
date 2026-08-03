@@ -79,7 +79,47 @@ function MainPortfolioContent() {
   const selectedDesign = designProjects.find((p) => p.id === selectedDesignId) || designProjects[0];
 
   return (
-    <div className="min-h-screen bg-[#070a13] text-slate-100 flex flex-col font-sans selection:bg-yellow-500 selection:text-slate-950">
+    <div className="min-h-screen bg-[#070B14] text-slate-100 flex flex-col font-sans selection:bg-[#00E5FF] selection:text-slate-950 relative overflow-x-hidden">
+      {/* ULTRA-MODERN DARK UI RADIAL GRADIENT BACKGROUND (#070B14, #00E5FF, #7C3AED) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#070B14]">
+        {/* Soft Blended Radial Gradients */}
+        <div 
+          className="absolute inset-0 opacity-70"
+          style={{
+            background: `
+              radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.18) 0%, transparent 55%),
+              radial-gradient(circle at 90% 20%, rgba(124, 58, 237, 0.22) 0%, transparent 55%),
+              radial-gradient(circle at 15% 70%, rgba(0, 229, 255, 0.14) 0%, transparent 50%),
+              radial-gradient(circle at 85% 70%, rgba(124, 58, 237, 0.18) 0%, transparent 50%)
+            `
+          }}
+        />
+
+        {/* TOP LEFT GLOW: #00E5FF (Cyan) */}
+        <div 
+          className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full blur-[130px] opacity-25 animate-pulse-slow"
+          style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
+        />
+
+        {/* TOP RIGHT GLOW: #7C3AED (Purple) */}
+        <div 
+          className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[130px] opacity-30 animate-pulse-slow"
+          style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
+        />
+
+        {/* LOWER LEFT GLOW: #00E5FF (Cyan) */}
+        <div 
+          className="absolute top-[50%] -left-48 w-[750px] h-[750px] rounded-full blur-[150px] opacity-20"
+          style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
+        />
+
+        {/* LOWER RIGHT GLOW: #7C3AED (Purple) */}
+        <div 
+          className="absolute top-[55%] -right-48 w-[750px] h-[750px] rounded-full blur-[150px] opacity-25"
+          style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
+        />
+      </div>
+
       <CustomMouseEffects />
       <WaterRippleCanvas />
       
@@ -87,7 +127,7 @@ function MainPortfolioContent() {
       <Navbar />
 
       {/* MAIN LAYOUT CONTAINER */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 pt-24 md:pt-28 space-y-16">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 pt-24 md:pt-28 space-y-16 relative z-10">
         
         {/* HERO BANNER SECTION (#home) */}
         <HeroBanner3D avatarUrl={AVATAR} />
@@ -98,8 +138,14 @@ function MainPortfolioContent() {
         {/* PORTFOLIO SHOWCASE SECTION (#portfolio) */}
         <section id="portfolio" className="scroll-mt-24 space-y-8 relative">
           {/* BACKGROUND AMBIENT GLOW DECORATION */}
-          <div className="absolute -top-10 -left-10 w-96 h-96 rounded-full bg-gradient-to-tr from-yellow-500/10 via-amber-500/10 to-yellow-300/10 blur-3xl pointer-events-none z-0" />
-          <div className="absolute -bottom-10 -right-10 w-96 h-96 rounded-full bg-gradient-to-bl from-amber-500/10 via-yellow-400/10 to-amber-300/10 blur-3xl pointer-events-none z-0" />
+          <div 
+            className="absolute -top-10 -left-10 w-96 h-96 rounded-full blur-3xl pointer-events-none z-0 opacity-25"
+            style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
+          />
+          <div 
+            className="absolute -bottom-10 -right-10 w-96 h-96 rounded-full blur-3xl pointer-events-none z-0 opacity-30"
+            style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
+          />
 
           {/* SECTION HEADER */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-900 pb-5 relative z-10">

@@ -144,8 +144,14 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
   return (
     <div id="about-and-contact-section" className="space-y-16 py-8 relative">
       {/* LUXURIOUS AMBIENT DUAL GLOW BACKGROUNDS */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 rounded-full bg-gradient-to-tr from-cyan-500/15 via-teal-600/10 to-transparent blur-3xl pointer-events-none z-0" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 rounded-full bg-gradient-to-bl from-purple-600/15 via-fuchsia-500/10 to-transparent blur-3xl pointer-events-none z-0" />
+      <div 
+        className="absolute top-1/4 -left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none z-0 opacity-20"
+        style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
+      />
+      <div 
+        className="absolute bottom-10 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none z-0 opacity-25"
+        style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
+      />
 
       {/* ==================== ABOUT ME SECTION ==================== */}
       <section id="about" className="scroll-mt-24 bg-black/80 backdrop-blur-2xl border border-cyan-500/20 rounded-3xl p-6 sm:p-10 md:p-12 shadow-[0_0_50px_rgba(34,211,238,0.08)] relative overflow-hidden z-10">

@@ -41,7 +41,7 @@ export default function FeaturedShowreel() {
 
   const containerBgClass = bgStyle === 'matte-black'
     ? 'bg-black border-zinc-800/90 shadow-[0_20px_50px_rgba(0,0,0,1)]'
-    : 'bg-[#050812] border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)]';
+    : 'bg-[#070B14]/90 border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)]';
 
   return (
     <motion.section
@@ -71,7 +71,8 @@ export default function FeaturedShowreel() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-cyan-500/30 via-teal-400/20 to-transparent blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(34,211,238,0.25)]"
+            className="absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(0,229,255,0.25)]"
+            style={{ background: 'radial-gradient(circle, rgba(0, 229, 255, 0.35) 0%, transparent 70%)' }}
           />
 
           {/* Top-Right soft purple glow */}
@@ -85,7 +86,8 @@ export default function FeaturedShowreel() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-bl from-purple-600/30 via-fuchsia-500/20 to-transparent blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(168,85,247,0.25)]"
+            className="absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(124,58,237,0.25)]"
+            style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.35) 0%, transparent 70%)' }}
           />
         </>
       )}

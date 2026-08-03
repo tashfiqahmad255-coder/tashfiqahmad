@@ -62,8 +62,14 @@ export default function ResearchSection() {
   return (
     <div className="space-y-8 pt-10 border-t border-slate-900/80 relative">
       {/* BACKGROUND AMBIENT COLOR GRADING SHAPES */}
-      <div className="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-gradient-to-tr from-cyan-500/15 via-teal-400/10 to-transparent blur-3xl pointer-events-none z-0" />
-      <div className="absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-gradient-to-bl from-purple-600/15 via-fuchsia-500/10 to-transparent blur-3xl pointer-events-none z-0" />
+      <div 
+        className="absolute -top-10 -left-10 w-72 h-72 rounded-full blur-3xl pointer-events-none z-0 opacity-20"
+        style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
+      />
+      <div 
+        className="absolute -bottom-10 -right-10 w-72 h-72 rounded-full blur-3xl pointer-events-none z-0 opacity-25"
+        style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
+      />
 
       {/* SUB-SECTION HEADER: FAVORITE YOUTUBE VIDEO PROJECTS */}
       <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">

@@ -69,7 +69,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
     >
       {/* TWO SPECIFIC DIAGONAL CORNER FEATHERED GLOWS - DUAL CYAN & PURPLE THEME */}
       
-      {/* DIAGONAL CORNER 1: BOTTOM-LEFT (UNDER SKILLS & NAME) - VIBRANT CYAN & TEAL GLOW */}
+      {/* DIAGONAL CORNER 1: BOTTOM-LEFT (UNDER SKILLS & NAME) - VIBRANT CYAN #00E5FF GLOW */}
       <motion.div
         animate={{
           scale: [1, 1.06, 1],
@@ -80,10 +80,11 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute -bottom-5 -left-5 sm:-bottom-8 sm:-left-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 bg-gradient-to-tr from-cyan-500/40 via-teal-400/25 to-transparent shadow-[0_0_50px_rgba(34,211,238,0.35)]"
+        className="absolute -bottom-5 -left-5 sm:-bottom-8 sm:-left-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 shadow-[0_0_50px_rgba(0,229,255,0.35)]"
+        style={{ background: 'radial-gradient(circle, rgba(0, 229, 255, 0.45) 0%, transparent 70%)' }}
       />
 
-      {/* DIAGONAL CORNER 2: TOP-RIGHT (ABOVE PICTURE/HEAD) - ELECTRIC PURPLE & FUCHSIA GLOW */}
+      {/* DIAGONAL CORNER 2: TOP-RIGHT (ABOVE PICTURE/HEAD) - ELECTRIC PURPLE #7C3AED GLOW */}
       <motion.div
         animate={{
           scale: [1.03, 0.97, 1.03],
@@ -94,7 +95,8 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute -top-5 -right-5 sm:-top-8 sm:-right-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 bg-gradient-to-bl from-purple-600/45 via-fuchsia-500/30 to-transparent shadow-[0_0_50px_rgba(168,85,247,0.35)]"
+        className="absolute -top-5 -right-5 sm:-top-8 sm:-right-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 shadow-[0_0_50px_rgba(124,58,237,0.35)]"
+        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.45) 0%, transparent 70%)' }}
       />
 
       {/* 3D TILT CONTAINER */}
@@ -105,7 +107,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           rotateY,
           transformStyle: 'preserve-3d',
         }}
-        className="relative rounded-2xl overflow-hidden bg-[#050812] border border-slate-800/80 p-6 md:p-10 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] transition-all duration-300"
+        className="relative rounded-2xl overflow-hidden bg-[#070B14]/90 border border-slate-800/80 p-6 md:p-10 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] transition-all duration-300"
       >
         {/* GLOWING DUAL-TONE EDGE HIGHLIGHT BORDER (CYAN & PURPLE) */}
         <div className="absolute inset-0 rounded-2xl pointer-events-none p-[1px] bg-gradient-to-r from-cyan-400/40 via-fuchsia-300/25 to-purple-500/40 [mask-image:linear-gradient(white,white)]" />
