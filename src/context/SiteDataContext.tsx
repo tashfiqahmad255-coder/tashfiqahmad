@@ -103,7 +103,7 @@ const DEFAULT_HERO: HeroData = {
 const DEFAULT_SHOWREEL: ShowreelData = {
   label: 'LATEST SHOWREEL',
   heading: 'WATCH MY SHOWREEL',
-  youtubeUrl: 'https://youtu.be/au2xoh2zcyI'
+  youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
 };
 
 const DEFAULT_AI_WORKFLOW_VIDEOS: AiWorkflowVideo[] = [
@@ -253,10 +253,26 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         cleanBio1 = cleanBio1.replace(/AS Specialist/g, 'AI Specialist').replace(/\bAS\b/g, 'AI');
         cleanBio2 = cleanBio2.replace(/AS workflows/g, 'AI workflows').replace(/\bAS\b/g, 'AI');
 
+        // Enforce exact hardcoded video URLs so they never get mixed up from stale localStorage
+        const cleanShowreel = {
+          ...DEFAULT_SHOWREEL,
+          ...parsed.showreel,
+          youtubeUrl: parsed.showreel?.youtubeUrl || 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
+        };
+
+        const cleanVideoProjects = (parsed.videoProjects?.length === 6)
+          ? parsed.videoProjects
+          : VIDEO_PROJECTS;
+
+        const cleanAiWorkflowVideos = (parsed.aiWorkflowVideos?.length === 3)
+          ? parsed.aiWorkflowVideos
+          : DEFAULT_AI_WORKFLOW_VIDEOS;
+
         return {
           hero: { ...DEFAULT_HERO, ...parsed.hero, tickerSkills: cleanTickerSkills },
-          showreel: { ...DEFAULT_SHOWREEL, ...parsed.showreel },
-          videoProjects: parsed.videoProjects?.length ? parsed.videoProjects : DEFAULT_SITE_DATA.videoProjects,
+          showreel: cleanShowreel,
+          videoProjects: cleanVideoProjects,
+          aiWorkflowVideos: cleanAiWorkflowVideos,
           designProjects: parsed.designProjects?.length ? parsed.designProjects : DEFAULT_SITE_DATA.designProjects,
           researchTopics: parsed.researchTopics?.length ? parsed.researchTopics : DEFAULT_SITE_DATA.researchTopics,
           aboutContact: { ...DEFAULT_ABOUT_CONTACT, ...parsed.aboutContact, bio1: cleanBio1, bio2: cleanBio2 },

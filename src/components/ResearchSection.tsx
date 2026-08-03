@@ -36,21 +36,21 @@ export default function ResearchSection() {
   const [playingInlineId, setPlayingInlineId] = useState<string | null>(null);
   const [activePlayingVideo, setActivePlayingVideo] = useState<{ name: string; url: string } | null>(null);
 
-  // Default 3 YouTube links provided by user for section 4 (Favorite Video Projects)
+  // Default 3 YouTube links provided by user for 16:9 video section
   const defaultVideos = [
     {
       id: 'ai_vid_01',
-      name: 'Favorite Video #1',
+      name: 'Featured Video #1',
       youtubeUrl: 'https://youtu.be/Lo9j44fRxek',
     },
     {
       id: 'ai_vid_02',
-      name: 'Favorite Video #2',
+      name: 'Featured Video #2',
       youtubeUrl: 'https://youtu.be/au2xoh2zcyI',
     },
     {
       id: 'ai_vid_03',
-      name: 'Favorite Video #3',
+      name: 'Featured Video #3',
       youtubeUrl: 'https://youtu.be/uZvCG05QIQQ',
     },
   ];
