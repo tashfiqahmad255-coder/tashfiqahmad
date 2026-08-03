@@ -93,12 +93,10 @@ const DEFAULT_HERO: HeroData = {
   introBadge: 'Hello, I am',
   avatarUrl: 'https://i.postimg.cc/qB3G5rxg/t6t.png',
   tickerSkills: [
-    'Video Editor',
-    'Creative Specialist',
-    'AS Specialist',
-    'Social Media Marketer',
-    'Motion Designer',
-    'Colorist'
+    'Professional Video Editor',
+    'Graphic Designer',
+    'AI Specialist',
+    'Social Media Marketer'
   ]
 };
 
@@ -166,8 +164,8 @@ const DEFAULT_ABOUT_CONTACT: AboutContactData = {
   facebook: CONTACT_INFO.facebook,
   instagram: CONTACT_INFO.instagram,
   telegram: CONTACT_INFO.telegram,
-  bio1: "Hi, I'm Tasfiq Ahmed Tamim, a professional Video Editor, Graphic Designer, AS Specialist, and Social Media Marketer.",
-  bio2: "I specialize in creating cinematic edits, commercial advertisements, and premium vector graphic layouts that make brands stand out. By implementing modern AS workflows and automation, I deliver stunning results with extreme efficiency.",
+  bio1: "Hi, I'm Tashfiq Ahmad Tamim, a professional Video Editor, Graphic Designer, AI Specialist, and Social Media Marketer.",
+  bio2: "I specialize in creating cinematic edits, commercial advertisements, and premium vector graphic layouts that make brands stand out. By implementing modern AI workflows and automation, I deliver stunning results with extreme efficiency.",
   accolades: [
     { title: 'Cinematic Videos Edited', value: '250+' },
     { title: 'Client Sincerity Rating', value: '5.0 / 5.0' },
@@ -240,13 +238,28 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        
+        // Sanitize tickerSkills to ensure no stale "AS Specialist" or "Colorist" persists from previous localStorage saves
+        const cleanTickerSkills = [
+          'Professional Video Editor',
+          'Graphic Designer',
+          'AI Specialist',
+          'Social Media Marketer'
+        ];
+
+        // Sanitize bio texts if old legacy strings were cached
+        let cleanBio1 = parsed.aboutContact?.bio1 || DEFAULT_ABOUT_CONTACT.bio1;
+        let cleanBio2 = parsed.aboutContact?.bio2 || DEFAULT_ABOUT_CONTACT.bio2;
+        cleanBio1 = cleanBio1.replace(/AS Specialist/g, 'AI Specialist').replace(/\bAS\b/g, 'AI');
+        cleanBio2 = cleanBio2.replace(/AS workflows/g, 'AI workflows').replace(/\bAS\b/g, 'AI');
+
         return {
-          hero: { ...DEFAULT_HERO, ...parsed.hero },
+          hero: { ...DEFAULT_HERO, ...parsed.hero, tickerSkills: cleanTickerSkills },
           showreel: { ...DEFAULT_SHOWREEL, ...parsed.showreel },
           videoProjects: parsed.videoProjects?.length ? parsed.videoProjects : DEFAULT_SITE_DATA.videoProjects,
           designProjects: parsed.designProjects?.length ? parsed.designProjects : DEFAULT_SITE_DATA.designProjects,
           researchTopics: parsed.researchTopics?.length ? parsed.researchTopics : DEFAULT_SITE_DATA.researchTopics,
-          aboutContact: { ...DEFAULT_ABOUT_CONTACT, ...parsed.aboutContact },
+          aboutContact: { ...DEFAULT_ABOUT_CONTACT, ...parsed.aboutContact, bio1: cleanBio1, bio2: cleanBio2 },
           softwares: parsed.softwares?.length ? parsed.softwares : DEFAULT_SITE_DATA.softwares,
           adminPasskey: parsed.adminPasskey || '2026'
         };

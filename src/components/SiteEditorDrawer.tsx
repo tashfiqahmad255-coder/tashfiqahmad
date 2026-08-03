@@ -691,7 +691,23 @@ export default function SiteEditorDrawer() {
                             updateHero({ subtitle: e.target.value });
                             handleQuickSaveNotice();
                           }}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-mono text-slate-400 uppercase block mb-1">
+                          Ticker Animated Skills (Comma Separated)
+                        </label>
+                        <input
+                          type="text"
+                          value={(siteData.hero.tickerSkills || []).join(', ')}
+                          onChange={(e) => {
+                            const skillsArray = e.target.value.split(',').map((s) => s.trim()).filter(Boolean);
+                            updateHero({ tickerSkills: skillsArray });
+                            handleQuickSaveNotice();
+                          }}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono"
                         />
                       </div>
                     </div>

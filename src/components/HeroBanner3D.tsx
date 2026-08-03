@@ -192,15 +192,24 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
             <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
 
             <motion.div
-              className="flex whitespace-nowrap gap-7"
+              className="flex whitespace-nowrap gap-8"
               animate={{ x: ['0%', '-50%'] }}
-              transition={{ ease: 'linear', duration: 11, repeat: Infinity }}
+              transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
               style={{ width: 'fit-content' }}
             >
               {[
-                ...(hero.tickerSkills || []),
-                ...(hero.tickerSkills || []),
-                ...(hero.tickerSkills || []),
+                ...(hero.tickerSkills && hero.tickerSkills.length > 0
+                  ? hero.tickerSkills
+                  : ['Professional Video Editor', 'Graphic Designer', 'AI Specialist', 'Social Media Marketer']),
+                ...(hero.tickerSkills && hero.tickerSkills.length > 0
+                  ? hero.tickerSkills
+                  : ['Professional Video Editor', 'Graphic Designer', 'AI Specialist', 'Social Media Marketer']),
+                ...(hero.tickerSkills && hero.tickerSkills.length > 0
+                  ? hero.tickerSkills
+                  : ['Professional Video Editor', 'Graphic Designer', 'AI Specialist', 'Social Media Marketer']),
+                ...(hero.tickerSkills && hero.tickerSkills.length > 0
+                  ? hero.tickerSkills
+                  : ['Professional Video Editor', 'Graphic Designer', 'AI Specialist', 'Social Media Marketer']),
               ].map((skill, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 shrink-0">
                   <span className="text-cyan-400 font-mono text-xs">✦</span>
