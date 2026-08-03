@@ -91,7 +91,7 @@ const DEFAULT_HERO: HeroData = {
   title: 'Video Editor & Creative Specialist',
   subtitle: 'Merging advanced narrative storytelling, pristine high-tempo video pacing, premium color grading, and modern vector art. Explore the active creative sandbox and test my modular design units below.',
   introBadge: 'Hello, I am',
-  avatarUrl: 'https://i.postimg.cc/qB3G5rxg/t6t.png',
+  avatarUrl: 'https://i.postimg.cc/g0Bd9kCC/Chat-GPT-Image-Jul-20-2026-06-44-19-PM.png',
   tickerSkills: [
     'Professional Video Editor',
     'Graphic Designer',
