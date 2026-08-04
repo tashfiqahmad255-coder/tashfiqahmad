@@ -257,7 +257,7 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         const cleanShowreel = {
           ...DEFAULT_SHOWREEL,
           ...parsed.showreel,
-          youtubeUrl: parsed.showreel?.youtubeUrl || 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
+          youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
         };
 
         const cleanVideoProjects = (parsed.videoProjects?.length === 6)
