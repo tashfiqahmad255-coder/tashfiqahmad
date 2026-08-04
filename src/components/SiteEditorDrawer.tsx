@@ -536,9 +536,8 @@ export default function SiteEditorDrawer() {
                     { id: 'hero', label: '1. Home / Hero', icon: Home },
                     { id: 'showreel', label: '2. Showreel', icon: Video },
                     { id: 'portfolio', label: '3. Portfolio', icon: Briefcase },
-                    { id: 'research', label: '4. Research', icon: BookOpen },
-                    { id: 'about', label: '5. About & Contact', icon: UserCheck },
-                    { id: 'backup', label: '6. Backup / Import', icon: Save },
+                    { id: 'about', label: '4. About & Contact', icon: UserCheck },
+                    { id: 'backup', label: '5. Backup / Import', icon: Save },
                   ].map((tab) => {
                     const Icon = tab.icon;
                     const isActive = activeTab === tab.id;

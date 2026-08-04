@@ -13,7 +13,6 @@ import WaterRippleCanvas from './components/WaterRippleCanvas';
 import HeroBanner3D from './components/HeroBanner3D';
 import FeaturedShowreel from './components/FeaturedShowreel';
 import Navbar from './components/Navbar';
-import ResearchSection from './components/ResearchSection';
 import SiteEditorDrawer from './components/SiteEditorDrawer';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { SiteDataProvider, useSiteData } from './context/SiteDataContext';
@@ -282,9 +281,6 @@ function MainPortfolioContent() {
               );
             })}
           </div>
-
-          {/* SUB-SECTION 2: FAVORITE YOUTUBE VIDEO PROJECTS */}
-          <ResearchSection />
         </section>
 
         {/* ABOUT & CONTACT SECTION (#about, #contact) */}
