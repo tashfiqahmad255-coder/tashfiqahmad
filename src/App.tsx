@@ -12,6 +12,7 @@ import CustomMouseEffects from './components/CustomMouseEffects';
 import WaterRippleCanvas from './components/WaterRippleCanvas';
 import HeroBanner3D from './components/HeroBanner3D';
 import FeaturedShowreel from './components/FeaturedShowreel';
+import FavoriteYouTubeProjects from './components/FavoriteYouTubeProjects';
 import Navbar from './components/Navbar';
 import SiteEditorDrawer from './components/SiteEditorDrawer';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
@@ -282,6 +283,9 @@ function MainPortfolioContent() {
             })}
           </div>
         </section>
+
+        {/* FAVORITE YOUTUBE VIDEO PROJECTS */}
+        <FavoriteYouTubeProjects />
 
         {/* ABOUT & CONTACT SECTION (#about, #contact) */}
         <section className="border-t border-slate-900 pt-10">
