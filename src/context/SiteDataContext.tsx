@@ -260,9 +260,26 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
         };
 
-        const cleanVideoProjects = (parsed.videoProjects?.length === 6)
+        const cleanVideoProjects = (parsed.videoProjects?.length === 6
           ? parsed.videoProjects
-          : VIDEO_PROJECTS;
+          : VIDEO_PROJECTS
+        ).map((proj: any, idx: number) => {
+          if (idx === 0) {
+            return {
+              ...proj,
+              name: 'Featured Vertical Short #1',
+              youtubeUrl: 'https://youtube.com/shorts/hUaubQKbius?feature=share'
+            };
+          }
+          if (idx === 1) {
+            return {
+              ...proj,
+              name: 'Featured Vertical Short #2',
+              youtubeUrl: 'https://youtube.com/shorts/NDb6XfrtvuQ?feature=share'
+            };
+          }
+          return proj;
+        });
 
         const cleanAiWorkflowVideos = (parsed.aiWorkflowVideos?.length === 3)
           ? parsed.aiWorkflowVideos
