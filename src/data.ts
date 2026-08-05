@@ -170,7 +170,7 @@ export const DESIGN_PROJECTS: DesignProject[] = [
     clientName: 'Sonar Tea Bangladesh',
     toolsUsed: ['Photoshop', 'Illustrator'],
     previewImage: '/src/assets/images/bangladesh_art_showcase_1784532243275.jpg',
-    behanceLink: 'https://www.behance.net/tashfiqtamim',
+    behanceLink: 'https://www.behance.net/tashfiqahmad',
     highlights: ['Premium Design', 'Modern Layout', 'Print Ready', 'High Resolution'],
     completionYear: 2025
   },
@@ -182,7 +182,7 @@ export const DESIGN_PROJECTS: DesignProject[] = [
     clientName: 'Dhaka Retro Concerts',
     toolsUsed: ['Photoshop', 'Illustrator'],
     previewImage: '/src/assets/images/portfolio_hero_banner_1784532214740.jpg',
-    behanceLink: 'https://www.behance.net/tashfiqtamim',
+    behanceLink: 'https://www.behance.net/tashfiqahmad',
     highlights: ['Vibrant Neon Palettes', 'High Resolution', 'Modern Layout', 'Geometric Composition'],
     completionYear: 2025
   },
@@ -194,7 +194,7 @@ export const DESIGN_PROJECTS: DesignProject[] = [
     clientName: 'Optima BD Automation',
     toolsUsed: ['Illustrator', 'Canva'],
     previewImage: '/src/assets/images/profile_avatar_1784532229274.jpg',
-    behanceLink: 'https://www.behance.net/tashfiqtamim',
+    behanceLink: 'https://www.behance.net/tashfiqahmad',
     highlights: ['Social Media Design', 'Consistent Kit styling', 'Print Ready', 'Vector Scalable'],
     completionYear: 2026
   }
@@ -217,7 +217,7 @@ export const CONTACT_INFO = {
   phone2: '01404783319',
   email: 'tashfiqahmad.yaqoot@gmail.com',
   youtube: 'https://www.youtube.com/channel/UCdVuiWsKiGCJMY8B-K35WUw',
-  behance: 'https://www.behance.net/tashfiqtamim',
+  behance: 'https://www.behance.net/tashfiqahmad',
   linkedin: 'https://www.linkedin.com/feed/',
   facebook: 'https://www.facebook.com/tashfiqahmad.tamim.3',
   instagram: 'https://www.instagram.com/tashfiq_tamim?igsh=ankwYXFmNTRteW83',

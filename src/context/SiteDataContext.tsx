@@ -285,6 +285,11 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ? parsed.aiWorkflowVideos
           : DEFAULT_AI_WORKFLOW_VIDEOS;
 
+        let cleanBehance = parsed.aboutContact?.behance;
+        if (!cleanBehance || cleanBehance.includes('tashfiqtamim')) {
+          cleanBehance = 'https://www.behance.net/tashfiqahmad';
+        }
+
         return {
           hero: { ...DEFAULT_HERO, ...parsed.hero, tickerSkills: cleanTickerSkills },
           showreel: cleanShowreel,
@@ -292,7 +297,7 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           aiWorkflowVideos: cleanAiWorkflowVideos,
           designProjects: parsed.designProjects?.length ? parsed.designProjects : DEFAULT_SITE_DATA.designProjects,
           researchTopics: parsed.researchTopics?.length ? parsed.researchTopics : DEFAULT_SITE_DATA.researchTopics,
-          aboutContact: { ...DEFAULT_ABOUT_CONTACT, ...parsed.aboutContact, bio1: cleanBio1, bio2: cleanBio2 },
+          aboutContact: { ...DEFAULT_ABOUT_CONTACT, ...parsed.aboutContact, bio1: cleanBio1, bio2: cleanBio2, behance: cleanBehance },
           softwares: parsed.softwares?.length ? parsed.softwares : DEFAULT_SITE_DATA.softwares,
           adminPasskey: parsed.adminPasskey || '2026'
         };

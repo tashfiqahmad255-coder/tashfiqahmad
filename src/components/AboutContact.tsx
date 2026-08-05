@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, Video, Palette, Bot, Megaphone, ExternalLink } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 
 interface AboutContactProps {
   avatarImage: string;
@@ -74,63 +75,66 @@ function GmailIcon({ className = "w-6 h-6" }: { className?: string }) {
 }
 
 export default function AboutContact({ avatarImage }: AboutContactProps) {
-  // 8 Social Online Links as instructed
+  const { siteData } = useSiteData();
+  const contact = siteData?.aboutContact;
+
+  // 8 Social Online Links in exact requested order: WhatsApp, Gmail, Telegram, Facebook, Instagram, Behance, LinkedIn, YouTube
   const socialLinks = [
     {
-      name: 'YouTube',
-      url: 'https://www.youtube.com/channel/UCdVuiWsKiGCJMY8B-K35WUw',
-      icon: YouTubeIcon,
-      hoverColor: 'hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
-      glow: 'from-cyan-500/25 via-teal-500/15 to-transparent',
-    },
-    {
-      name: 'Behance',
-      url: 'https://www.behance.net/tashfiqtamim',
-      icon: BehanceIcon,
-      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
-      glow: 'from-teal-500/25 via-cyan-500/15 to-transparent',
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://www.linkedin.com/feed/',
-      icon: LinkedInIcon,
-      hoverColor: 'hover:text-cyan-300 hover:border-cyan-300/60 hover:shadow-cyan-300/30',
-      glow: 'from-cyan-400/25 via-fuchsia-500/15 to-transparent',
-    },
-    {
-      name: 'Facebook',
-      url: 'https://www.facebook.com/tashfiqahmad.tamim.3',
-      icon: FacebookIcon,
-      hoverColor: 'hover:text-purple-400 hover:border-purple-400/60 hover:shadow-purple-400/30',
-      glow: 'from-fuchsia-400/25 via-purple-500/15 to-transparent',
-    },
-    {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/tashfiq_tamim?igsh=ankwYXFmNTRteW83',
-      icon: InstagramIcon,
-      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
-      glow: 'from-cyan-500/25 via-purple-400/15 to-transparent',
-    },
-    {
-      name: 'Telegram',
-      url: 'https://web.telegram.org/k/#777000',
-      icon: TelegramIcon,
-      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
-      glow: 'from-teal-500/25 via-cyan-400/15 to-transparent',
-    },
-    {
       name: 'WhatsApp',
-      url: 'https://wa.me/8801823980528',
+      url: contact?.phone1 ? `https://wa.me/880${contact.phone1.replace(/^0+/, '')}` : 'https://wa.me/8801823980528',
       icon: WhatsAppIcon,
       hoverColor: 'hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
       glow: 'from-cyan-500/25 via-teal-500/15 to-transparent',
     },
     {
       name: 'Gmail',
-      url: 'mailto:tashfiqahmad.yaqoot@gmail.com',
+      url: contact?.email ? (contact.email.startsWith('mailto:') ? contact.email : `mailto:${contact.email}`) : 'mailto:tashfiqahmad.yaqoot@gmail.com',
       icon: GmailIcon,
       hoverColor: 'hover:text-purple-300 hover:border-purple-400/60 hover:shadow-purple-400/30',
       glow: 'from-purple-500/25 via-fuchsia-500/15 to-transparent',
+    },
+    {
+      name: 'Telegram',
+      url: contact?.telegram || 'https://web.telegram.org/k/#777000',
+      icon: TelegramIcon,
+      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
+      glow: 'from-teal-500/25 via-cyan-400/15 to-transparent',
+    },
+    {
+      name: 'Facebook',
+      url: contact?.facebook || 'https://www.facebook.com/tashfiqahmad.tamim.3',
+      icon: FacebookIcon,
+      hoverColor: 'hover:text-purple-400 hover:border-purple-400/60 hover:shadow-purple-400/30',
+      glow: 'from-fuchsia-400/25 via-purple-500/15 to-transparent',
+    },
+    {
+      name: 'Instagram',
+      url: contact?.instagram || 'https://www.instagram.com/tashfiq_tamim?igsh=ankwYXFmNTRteW83',
+      icon: InstagramIcon,
+      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
+      glow: 'from-cyan-500/25 via-purple-400/15 to-transparent',
+    },
+    {
+      name: 'Behance',
+      url: contact?.behance || 'https://www.behance.net/tashfiqahmad',
+      icon: BehanceIcon,
+      hoverColor: 'hover:text-cyan-300 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
+      glow: 'from-teal-500/25 via-cyan-500/15 to-transparent',
+    },
+    {
+      name: 'LinkedIn',
+      url: contact?.linkedin || 'https://www.linkedin.com/feed/',
+      icon: LinkedInIcon,
+      hoverColor: 'hover:text-cyan-300 hover:border-cyan-300/60 hover:shadow-cyan-300/30',
+      glow: 'from-cyan-400/25 via-fuchsia-500/15 to-transparent',
+    },
+    {
+      name: 'YouTube',
+      url: contact?.youtube || 'https://www.youtube.com/channel/UCdVuiWsKiGCJMY8B-K35WUw',
+      icon: YouTubeIcon,
+      hoverColor: 'hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-cyan-400/30',
+      glow: 'from-cyan-500/25 via-teal-500/15 to-transparent',
     },
   ];
 
