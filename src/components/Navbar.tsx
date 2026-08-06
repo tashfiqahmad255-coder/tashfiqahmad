@@ -1,7 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Sparkles, MessageSquare, Globe, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Sparkles, MessageSquare, Globe, ArrowUpRight, Languages } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+
+function UniqueLanguageButton({ className = '' }: { className?: string }) {
+  const { language, setLanguage } = useLanguage();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'EN' ? 'BN' : 'EN');
+  };
+
+  return (
+    <motion.button
+      type="button"
+      onClick={toggleLanguage}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      title={
+        language === 'EN'
+          ? 'বাংলায় পরিবর্তন করতে ক্লিক করুন (Click to switch to Bengali)'
+          : 'Click to switch to English (ইংরেজিতে পরিবর্তন করুন)'
+      }
+      className={`group relative inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-950/90 border border-cyan-500/40 hover:border-cyan-300 text-xs font-mono font-bold text-slate-200 hover:text-white shadow-lg shadow-cyan-950/30 backdrop-blur-md transition-all duration-300 ${className}`}
+    >
+      {/* Outer Glowing Neon Aura on Hover */}
+      <span className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-cyan-500 via-teal-400 to-cyan-300 opacity-0 group-hover:opacity-70 blur-sm transition duration-300 pointer-events-none" />
+
+      {/* Rotating World Globe Icon Container */}
+      <div className="relative flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500/15 border border-cyan-400/40 group-hover:bg-cyan-400/30 transition duration-300 text-cyan-300">
+        <motion.div
+          animate={{ rotate: isHovered ? 180 : 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          <Globe size={14} className="text-cyan-300 group-hover:text-cyan-100 transition-colors" />
+        </motion.div>
+
+        {/* Pulsing Orbit Ring */}
+        <span className="absolute inset-0 rounded-full border border-cyan-400/50 animate-ping opacity-25 pointer-events-none" />
+      </div>
+
+      {/* Animated Text Flip Transition for English / Bengali */}
+      <div className="relative overflow-hidden min-w-[70px] text-left">
+        <AnimatePresence mode="wait">
+          {language === 'EN' ? (
+            <motion.div
+              key="EN"
+              initial={{ y: -14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 14, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-1.5 text-cyan-300 font-black tracking-wide"
+            >
+              <span>English</span>
+              <span className="text-[9px] font-mono bg-cyan-500/20 text-cyan-200 px-1 py-0.2 rounded border border-cyan-400/30">
+                EN
+              </span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="BN"
+              initial={{ y: -14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 14, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-1.5 text-amber-300 font-black tracking-wide"
+            >
+              <span>বাংলা</span>
+              <span className="text-[9px] font-mono bg-amber-500/20 text-amber-200 px-1 py-0.2 rounded border border-amber-400/30">
+                BN
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Translation Icon Accent */}
+      <div className="flex items-center text-slate-400 group-hover:text-cyan-300 transition-colors">
+        <Languages size={13} className="text-cyan-400/80 group-hover:text-cyan-200" />
+      </div>
+    </motion.button>
+  );
+}
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
@@ -133,29 +215,8 @@ export default function Navbar() {
         {/* RIGHT: LANGUAGE SWITCHER & LET'S TALK BUTTON */}
         <div className="hidden lg:flex items-center gap-4">
           
-          {/* Language Switcher Pill - Single Color Active Bars */}
-          <div className="flex items-center gap-1 bg-slate-950 border border-cyan-500/30 p-1 rounded-full text-xs font-mono font-bold shadow-inner">
-            <button
-              onClick={() => setLanguage('EN')}
-              className={`px-3 py-1 rounded-full transition-all duration-200 ${
-                language === 'EN'
-                  ? 'bg-cyan-400 text-slate-950 shadow-md font-black'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              English (EN)
-            </button>
-            <button
-              onClick={() => setLanguage('BN')}
-              className={`px-3 py-1 rounded-full transition-all duration-200 ${
-                language === 'BN'
-                  ? 'bg-cyan-400 text-slate-950 shadow-md font-black'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              বাংলা (BN)
-            </button>
-          </div>
+          {/* Unique Language Switcher Button */}
+          <UniqueLanguageButton />
 
           {/* Premium "Let's Talk" Button - Single Color CTA */}
           <button
@@ -171,14 +232,8 @@ export default function Navbar() {
 
         {/* MOBILE RIGHT CONTROLS: LANG TOGGLE + HAMBURGER BUTTON */}
         <div className="flex lg:hidden items-center gap-2">
-          {/* Mobile Language Pill */}
-          <button
-            onClick={() => setLanguage(language === 'EN' ? 'BN' : 'EN')}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-950 border border-cyan-500/40 text-[11px] font-mono text-cyan-300 font-bold"
-          >
-            <Globe size={11} className="text-cyan-400" />
-            <span>{language === 'EN' ? 'BN' : 'EN'}</span>
-          </button>
+          {/* Unique Mobile Language Switcher Button */}
+          <UniqueLanguageButton />
 
           {/* Hamburger Menu Toggle Button */}
           <button
@@ -226,24 +281,7 @@ export default function Navbar() {
             {/* Mobile Language Switcher */}
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
               <span className="text-xs font-mono text-slate-400">Language / ভাষা</span>
-              <div className="flex gap-1 bg-slate-950 border border-cyan-500/30 p-1 rounded-lg text-xs font-mono">
-                <button
-                  onClick={() => setLanguage('EN')}
-                  className={`px-3 py-1 rounded transition ${
-                    language === 'EN' ? 'bg-cyan-400 text-slate-950 font-black' : 'text-slate-400'
-                  }`}
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => setLanguage('BN')}
-                  className={`px-3 py-1 rounded transition ${
-                    language === 'BN' ? 'bg-cyan-400 text-slate-950 font-black' : 'text-slate-400'
-                  }`}
-                >
-                  বাংলা
-                </button>
-              </div>
+              <UniqueLanguageButton />
             </div>
 
             {/* Mobile "Let's Talk" CTA */}

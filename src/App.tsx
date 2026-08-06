@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Video, Paintbrush, Sliders, MapPin, CheckCircle2, ChevronRight, 
   Sparkles, Instagram, Github, Youtube, FileText, Send, Phone, 
-  MessageSquare, Star, ArrowUpRight, Award, Layers, ExternalLink, HelpCircle, Edit3
+  MessageSquare, Star, ArrowUpRight, Award, Layers, ExternalLink, HelpCircle, Edit3, Play
 } from 'lucide-react';
 import ShowreelSandbox from './components/ShowreelSandbox';
 import DesignSandbox from './components/DesignSandbox';
@@ -24,7 +24,7 @@ import {
 
 const HERO_BANNER = '/src/assets/images/portfolio_hero_banner_1784532214740.jpg';
 const DESIGN_ARTWORK = '/src/assets/images/bangladesh_art_showcase_1784532243275.jpg';
-const AVATAR = 'https://i.postimg.cc/qB3G5rxg/t6t.png';
+const AVATAR = 'https://i.postimg.cc/c1w4wVvH/Chat-GPT-Image-Jul-29-2026-06-18-33-PM.png';
 
 function extractYouTubeId(url?: string): string | null {
   if (!url) return null;
@@ -44,22 +44,22 @@ function extractYouTubeId(url?: string): string | null {
 }
 
 function getCleanVideoThumbnail(youtubeUrl?: string, customThumbUrl?: string): string {
-  if (customThumbUrl && !customThumbUrl.includes('placeholder')) {
+  if (customThumbUrl && customThumbUrl.trim().length > 0 && !customThumbUrl.includes('placeholder')) {
     return customThumbUrl;
   }
   const ytId = extractYouTubeId(youtubeUrl);
   if (ytId) {
-    return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+    return `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
   }
   return HERO_BANNER;
 }
 
-function getCleanYouTubeEmbedUrl(youtubeUrl?: string): string {
+function getCleanYouTubeEmbedUrl(youtubeUrl?: string, autoplay = 1, mute = 0): string {
   const ytId = extractYouTubeId(youtubeUrl);
   if (ytId) {
-    return `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white`;
+    return `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=${autoplay}&mute=${mute}&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white&vq=hd1080&hd=1`;
   }
-  return 'https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white';
+  return `https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=${autoplay}&mute=${mute}&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white&vq=hd1080&hd=1`;
 }
 
 function MainPortfolioContent() {
@@ -74,6 +74,7 @@ function MainPortfolioContent() {
   const [selectedDesignId, setSelectedDesignId] = useState<string | null>(null);
   const [activePlayingVideo, setActivePlayingVideo] = useState<{ name: string; url: string } | null>(null);
   const [playingInlineId, setPlayingInlineId] = useState<string | null>(null);
+  const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
 
   const selectedVideo = videoProjects.find((p) => p.id === selectedVideoId) || videoProjects[0];
   const selectedDesign = designProjects.find((p) => p.id === selectedDesignId) || designProjects[0];
@@ -97,25 +98,25 @@ function MainPortfolioContent() {
 
         {/* TOP LEFT GLOW: #00E5FF (Cyan) */}
         <div 
-          className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full blur-[130px] opacity-25 animate-pulse-slow"
+          className="absolute -top-20 -left-20 w-64 h-64 sm:w-[700px] sm:h-[700px] rounded-full blur-2xl sm:blur-[130px] opacity-25 animate-pulse-slow pointer-events-none transform-gpu"
           style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
         />
 
         {/* TOP RIGHT GLOW: #7C3AED (Purple) */}
         <div 
-          className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[130px] opacity-30 animate-pulse-slow"
+          className="absolute -top-20 -right-20 w-64 h-64 sm:w-[700px] sm:h-[700px] rounded-full blur-2xl sm:blur-[130px] opacity-30 animate-pulse-slow pointer-events-none transform-gpu"
           style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
         />
 
         {/* LOWER LEFT GLOW: #00E5FF (Cyan) */}
         <div 
-          className="absolute top-[50%] -left-48 w-[750px] h-[750px] rounded-full blur-[150px] opacity-20"
+          className="absolute top-[50%] -left-24 w-72 h-72 sm:w-[750px] sm:h-[750px] rounded-full blur-2xl sm:blur-[150px] opacity-20 pointer-events-none transform-gpu"
           style={{ background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)' }}
         />
 
         {/* LOWER RIGHT GLOW: #7C3AED (Purple) */}
         <div 
-          className="absolute top-[55%] -right-48 w-[750px] h-[750px] rounded-full blur-[150px] opacity-25"
+          className="absolute top-[55%] -right-24 w-72 h-72 sm:w-[750px] sm:h-[750px] rounded-full blur-2xl sm:blur-[150px] opacity-25 pointer-events-none transform-gpu"
           style={{ background: 'radial-gradient(circle, #7C3AED 0%, transparent 70%)' }}
         />
       </div>
@@ -172,24 +173,33 @@ function MainPortfolioContent() {
             </button>
           </div>
 
-          {/* 6-ITEM GRID: 3 ITEMS IN LINE 1, 3 ITEMS IN LINE 2 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6 max-w-3xl mx-auto relative z-10">
+          {/* 6-ITEM REELS GRID: 2 COLUMNS ON MOBILE (LIKE INSTAGRAM/TIKTOK FEED), 3 COLUMNS ON PC */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6 max-w-3xl mx-auto relative z-10">
             {videoProjects.slice(0, 6).map((project, index) => {
               const ytId = extractYouTubeId(project.youtubeUrl);
-              const embedUrl = ytId 
-                ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1` 
-                : 'https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=1&rel=0&modestbranding=1';
               const fullUrl = project.youtubeUrl || `https://youtube.com/shorts/${ytId}`;
 
+              const isHovered = hoveredVideoId === project.id;
+              const isInlinePlaying = playingInlineId === project.id;
+              const isPlaying = isInlinePlaying || isHovered;
+
+              // On hover, autoplay muted so browser allows instant play; on inline click play unmuted
+              const embedUrl = isPlaying 
+                ? getCleanYouTubeEmbedUrl(project.youtubeUrl, 1, isInlinePlaying ? 0 : 1)
+                : getCleanYouTubeEmbedUrl(project.youtubeUrl, 0, 1);
+
               const customThumb = project.thumbnail;
-              const fallbackYtThumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : HERO_BANNER;
-              const displayThumb = (customThumb && customThumb.trim().length > 0) ? customThumb : fallbackYtThumb;
-              const isPlaying = playingInlineId === project.id;
+              const fallbackYtHdThumb = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : HERO_BANNER;
+              const displayThumb = (customThumb && customThumb.trim().length > 0 && !customThumb.includes('placeholder')) 
+                ? customThumb 
+                : fallbackYtHdThumb;
 
               return (
                 <div
                   key={project.id || index}
                   className="group relative flex flex-col w-full"
+                  onMouseEnter={() => setHoveredVideoId(project.id)}
+                  onMouseLeave={() => setHoveredVideoId(null)}
                 >
                   {/* AMBIENT GLOW BACKDROP AURA EFFECT NEXT TO / BEHIND VIDEO */}
                   <div className="absolute -inset-1 bg-gradient-to-tr from-yellow-500/25 via-amber-500/30 to-yellow-300/25 rounded-2xl blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg transition-all duration-500 pointer-events-none" />
@@ -197,7 +207,7 @@ function MainPortfolioContent() {
                   {/* MAIN CARD CONTAINER */}
                   <div className="relative flex flex-col rounded-xl overflow-hidden bg-slate-950 border border-slate-800/90 group-hover:border-yellow-500/70 transition-all duration-300 shadow-xl w-full">
                     
-                    {/* 100% CLEAN 9:16 VIDEO CANVAS (NO OVERLAY ICONS, BADGES, OR WATERMARKS) */}
+                    {/* 100% CLEAN 9:16 VIDEO CANVAS WITH HOVER OR TAP-TO-PLAY */}
                     <div className="relative w-full aspect-[9/16] bg-black overflow-hidden">
                       {isPlaying ? (
                         <iframe
@@ -208,19 +218,22 @@ function MainPortfolioContent() {
                           allowFullScreen
                         />
                       ) : (
-                        /* CLEAN UNTOUCHED THUMBNAIL PREVIEW (CLICK TO PLAY) */
+                        /* CLEAN UNTOUCHED THUMBNAIL PREVIEW (100% PURE VIDEO WITH NO OVERLAID ICONS OR BADGES) */
                         <div 
                           className="relative w-full h-full cursor-pointer bg-slate-900 overflow-hidden"
                           onClick={() => setPlayingInlineId(project.id)}
-                          title={`Click to play ${project.name || 'video'}`}
+                          title={`Click or tap to play ${project.name || 'video'} in HD`}
                         >
                           <img
                             src={displayThumb}
                             alt={project.name || `Video ${index + 1}`}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             onError={(e) => {
-                              if (ytId && displayThumb !== fallbackYtThumb) {
-                                (e.currentTarget as HTMLImageElement).src = fallbackYtThumb;
+                              const img = e.currentTarget as HTMLImageElement;
+                              if (ytId && img.src.includes('maxresdefault.jpg')) {
+                                img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
+                              } else if (ytId && img.src.includes('sddefault.jpg')) {
+                                img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
                               }
                             }}
                           />
@@ -229,17 +242,17 @@ function MainPortfolioContent() {
                     </div>
 
                     {/* CAPTION & CLEAN CONTROL BAR UNDERNEATH THE VIDEO (OUTSIDE THE VIDEO CANVAS) */}
-                    <div className="p-2.5 bg-slate-950 border-t border-slate-900 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-mono">
+                    <div className="p-2 sm:p-2.5 bg-slate-950 border-t border-slate-900 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono">
                         <span className="truncate font-bold text-slate-200">
                           {project.name || `Short #${index + 1}`}
                         </span>
-                        <span className="text-[10px] text-yellow-400/80 shrink-0 ml-1 font-semibold">9:16</span>
+                        <span className="text-[9px] sm:text-[10px] text-yellow-400/80 shrink-0 ml-1 font-semibold">9:16</span>
                       </div>
 
                       {/* CLEAN TEXT CONTROLS BELOW VIDEO */}
-                      <div className="flex items-center justify-between gap-1 pt-1 border-t border-slate-900/80 text-[10px] font-mono font-bold">
-                        {isPlaying ? (
+                      <div className="flex items-center justify-between gap-1 pt-1 border-t border-slate-900/80 text-[9px] sm:text-[10px] font-mono font-bold">
+                        {isInlinePlaying ? (
                           <button
                             type="button"
                             onClick={() => setPlayingInlineId(null)}
@@ -253,11 +266,11 @@ function MainPortfolioContent() {
                             onClick={() => setPlayingInlineId(project.id)}
                             className="text-yellow-400 hover:text-yellow-300 transition"
                           >
-                            [PLAY INLINE]
+                            [PLAY]
                           </button>
                         )}
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
                             onClick={() => setActivePlayingVideo({ name: project.name || `Short #${index + 1}`, url: fullUrl })}
@@ -271,7 +284,7 @@ function MainPortfolioContent() {
                             rel="noopener noreferrer"
                             className="text-slate-400 hover:text-slate-200 transition"
                           >
-                            [YOUTUBE]
+                            [YT]
                           </a>
                         </div>
                       </div>

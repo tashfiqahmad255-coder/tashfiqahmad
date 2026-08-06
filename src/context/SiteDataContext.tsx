@@ -91,7 +91,7 @@ const DEFAULT_HERO: HeroData = {
   title: 'Video Editor & Creative Specialist',
   subtitle: 'Merging advanced narrative storytelling, pristine high-tempo video pacing, premium color grading, and modern vector art. Explore the active creative sandbox and test my modular design units below.',
   introBadge: 'Hello, I am',
-  avatarUrl: 'https://i.postimg.cc/g0Bd9kCC/Chat-GPT-Image-Jul-20-2026-06-44-19-PM.png',
+  avatarUrl: 'https://i.postimg.cc/c1w4wVvH/Chat-GPT-Image-Jul-29-2026-06-18-33-PM.png',
   tickerSkills: [
     'Professional Video Editor',
     'Graphic Designer',
@@ -291,7 +291,14 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
 
         return {
-          hero: { ...DEFAULT_HERO, ...parsed.hero, tickerSkills: cleanTickerSkills },
+          hero: { 
+            ...DEFAULT_HERO, 
+            ...parsed.hero, 
+            avatarUrl: (!parsed.hero?.avatarUrl || parsed.hero.avatarUrl.includes('g0Bd9kCC') || parsed.hero.avatarUrl.includes('qB3G5rxg')) 
+              ? 'https://i.postimg.cc/c1w4wVvH/Chat-GPT-Image-Jul-29-2026-06-18-33-PM.png' 
+              : parsed.hero.avatarUrl,
+            tickerSkills: cleanTickerSkills 
+          },
           showreel: cleanShowreel,
           videoProjects: cleanVideoProjects,
           aiWorkflowVideos: cleanAiWorkflowVideos,

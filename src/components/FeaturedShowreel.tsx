@@ -7,6 +7,7 @@ export default function FeaturedShowreel() {
   const { siteData, openEditorTo } = useSiteData();
   const showreel = siteData.showreel;
   const [isMobile, setIsMobile] = useState(false);
+  const [isCardHovered, setIsCardHovered] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -20,9 +21,11 @@ export default function FeaturedShowreel() {
   const bgStyle = showreel.bgStyle || 'matte-black';
   const showGlow = showreel.showGlow ?? false;
 
-  // Format YouTube URL into proper embed URL with high quality parameters and modestbranding
-  const getEmbedUrl = (rawUrl: string) => {
-    if (!rawUrl) return 'https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1';
+  // Format YouTube URL into proper embed URL with high quality parameters, modestbranding, and hover play
+  const getEmbedUrl = (rawUrl: string, autoPlayOnHover = false) => {
+    const autoplayParam = autoPlayOnHover ? '1' : '0';
+    const muteParam = autoPlayOnHover ? '1' : '0';
+    if (!rawUrl) return `https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=${autoplayParam}&mute=${muteParam}&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
     
     // Extract ID from shorts link, standard link or embed link
     let videoId = '';
@@ -41,13 +44,13 @@ export default function FeaturedShowreel() {
     }
 
     if (videoId) {
-      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
+      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=${autoplayParam}&mute=${muteParam}&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
     }
 
     return rawUrl;
   };
 
-  const embedUrl = getEmbedUrl(showreel.youtubeUrl);
+  const embedUrl = getEmbedUrl(showreel.youtubeUrl, isCardHovered);
 
   const containerBgClass = bgStyle === 'matte-black'
     ? 'bg-black border-zinc-800/90 shadow-[0_20px_50px_rgba(0,0,0,1)]'
@@ -215,6 +218,8 @@ export default function FeaturedShowreel() {
             <motion.div
               whileHover={isMobile ? undefined : { scale: 1.02 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
+              onMouseEnter={() => setIsCardHovered(true)}
+              onMouseLeave={() => setIsCardHovered(false)}
               className="relative z-10 w-full h-full rounded-[24px] overflow-hidden bg-slate-950 border border-cyan-500/40 p-1 shadow-[0_20px_50px_rgba(0,0,0,0.9)] shadow-cyan-500/20 group transition-all duration-300 hover:border-cyan-300/80 hover:shadow-[0_25px_60px_rgba(34,211,238,0.4)] transform-gpu"
             >
               {/* INNER CONTAINER WITH EMBEDDED PLAYER */}

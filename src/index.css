@@ -41,3 +41,42 @@
 .animate-pulse-slow {
   animation: pulseSlow 8s ease-in-out infinite;
 }
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-orbit {
+  animation: orbit-spin 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-counter-orbit {
+  animation: orbit-counter-spin 32s linear infinite;
+  will-change: transform;
+}
+
+/* Mobile smooth scrolling & performance optimization */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .animate-pulse-slow {
+    animation: none !important;
+  }
+}
+

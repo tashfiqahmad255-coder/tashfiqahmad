@@ -23,6 +23,7 @@ function extractYouTubeId(url: string): string {
 export default function FavoriteYouTubeProjects() {
   const { siteData } = useSiteData();
   const [activeVideoModal, setActiveVideoModal] = useState<{ title: string; embedUrl: string; fullUrl: string } | null>(null);
+  const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
 
   const defaultVideos = [
     {
@@ -77,54 +78,66 @@ export default function FavoriteYouTubeProjects() {
           </div>
         </div>
 
-        {/* 3 VIDEO GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* VIDEO GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6">
           {videosToDisplay.map((video, idx) => {
             const ytId = extractYouTubeId(video.youtubeUrl);
-            const embedUrl = ytId
+            const modalEmbedUrl = ytId
               ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1`
               : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1';
+            const hoverEmbedUrl = ytId
+              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1&vq=hd1080&hd=1`
+              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1&vq=hd1080&hd=1';
             const fullUrl = video.youtubeUrl || `https://youtu.be/${ytId}`;
-            const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '';
+            const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '';
+            const isHovered = hoveredVideoId === video.id;
 
             return (
               <motion.div
                 key={video.id}
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
+                onMouseEnter={() => setHoveredVideoId(video.id)}
+                onMouseLeave={() => setHoveredVideoId(null)}
                 className="group bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 rounded-2xl overflow-hidden flex flex-col shadow-xl backdrop-blur-sm"
               >
-                {/* VIDEO THUMBNAIL / EMBED CONTAINER */}
+                {/* VIDEO THUMBNAIL / HOVER-TO-PLAY EMBED CONTAINER */}
                 <div className="relative aspect-video bg-slate-950 overflow-hidden group/thumb">
-                  {thumbnail ? (
-                    <img
-                      src={thumbnail}
-                      alt={video.name}
-                      className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500 opacity-90 group-hover/thumb:opacity-100"
+                  {isHovered ? (
+                    <iframe
+                      title={video.name}
+                      src={hoverEmbedUrl}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-600">
-                      <Film size={36} />
-                    </div>
+                    <>
+                      {thumbnail ? (
+                        <img
+                          src={thumbnail}
+                          alt={video.name}
+                          onClick={() => setActiveVideoModal({ title: video.name, embedUrl: modalEmbedUrl, fullUrl })}
+                          className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500 opacity-95 group-hover/thumb:opacity-100 cursor-pointer"
+                          onError={(e) => {
+                            const img = e.currentTarget as HTMLImageElement;
+                            if (ytId && img.src.includes('maxresdefault.jpg')) {
+                              img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
+                            } else if (ytId && img.src.includes('sddefault.jpg')) {
+                              img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div 
+                          className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-600 cursor-pointer"
+                          onClick={() => setActiveVideoModal({ title: video.name, embedUrl: modalEmbedUrl, fullUrl })}
+                        >
+                          <Film size={36} />
+                        </div>
+                      )}
+                    </>
                   )}
-
-                  {/* OVERLAY & PLAY BUTTON */}
-                  <div className="absolute inset-0 bg-slate-950/40 group-hover/thumb:bg-slate-950/20 transition-colors flex items-center justify-center">
-                    <button
-                      type="button"
-                      onClick={() => setActiveVideoModal({ title: video.name, embedUrl, fullUrl })}
-                      className="w-14 h-14 rounded-full bg-red-600/90 hover:bg-red-500 text-white flex items-center justify-center shadow-2xl transform group-hover/thumb:scale-110 transition-all duration-300 border border-red-400/30"
-                      title="Play Video"
-                    >
-                      <Play size={22} className="ml-1 fill-white" />
-                    </button>
-                  </div>
-
-                  {/* BADGE */}
-                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md border border-slate-800 text-amber-300 font-mono text-[10px] uppercase font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                    Project #{idx + 1}
-                  </div>
                 </div>
 
                 {/* CARD CONTENT */}
@@ -141,7 +154,7 @@ export default function FavoriteYouTubeProjects() {
                   <div className="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
                     <button
                       type="button"
-                      onClick={() => setActiveVideoModal({ title: video.name, embedUrl, fullUrl })}
+                      onClick={() => setActiveVideoModal({ title: video.name, embedUrl: modalEmbedUrl, fullUrl })}
                       className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 transition"
                     >
                       <Play size={12} className="fill-amber-400" /> Watch Video

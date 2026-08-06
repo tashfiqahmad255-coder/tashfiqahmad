@@ -132,6 +132,8 @@ export default function CustomMouseEffects() {
   const lastMoveSoundTimeRef = useRef(0);
 
   useEffect(() => {
+    if (isMobile) return;
+
     let lastHoverTime = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -196,7 +198,7 @@ export default function CustomMouseEffects() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isHoveringInteractive, playHoverSound, playClickSound, playMoveZoomSound]);
+  }, [isMobile, isHoveringInteractive, playHoverSound, playClickSound, playMoveZoomSound]);
 
   // Remove old ripples after animation duration
   const removeRipple = (id: number) => {

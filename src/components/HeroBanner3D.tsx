@@ -245,59 +245,52 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
 
           {/* Smooth Orbiting Ring for Software PNG Logos - Completely Upright & Straight */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            {SOFTWARES.map((software: SoftwareIcon, idx: number) => {
-              const baseAngle = (idx * 360) / SOFTWARES.length;
-              const radius = isMobile ? 95 : 140;
+            <div className="relative w-full h-full flex items-center justify-center animate-orbit transform-gpu">
+              {SOFTWARES.map((software: SoftwareIcon, idx: number) => {
+                const baseAngle = (idx * 360) / SOFTWARES.length;
+                const radius = isMobile ? 95 : 140;
 
-              const steps = 36;
-              const xKeyframes: number[] = [];
-              const yKeyframes: number[] = [];
+                return (
+                  <div
+                    key={software.name}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                    style={{
+                      transform: `rotate(${baseAngle}deg) translate(${radius}px)`,
+                    }}
+                  >
+                    <div className="animate-counter-orbit transform-gpu">
+                      <div
+                        className="group/icon cursor-pointer select-none"
+                        style={{
+                          transform: `rotate(${-baseAngle}deg)`,
+                        }}
+                        title={software.name}
+                      >
+                        <div className="w-11 h-11 sm:w-13 sm:h-13 aspect-square flex items-center justify-center p-0.5 select-none transition-all duration-300 group-hover/icon:drop-shadow-[0_0_22px_rgba(34,211,238,0.95)]">
+                          {software.imageUrl ? (
+                            <img
+                              src={software.imageUrl}
+                              alt={software.name}
+                              className="w-full h-full max-w-full max-h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover/icon:brightness-125"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <span className="text-xs sm:text-sm tracking-wider font-extrabold text-white">
+                              {software.abbreviation}
+                            </span>
+                          )}
+                        </div>
 
-              for (let step = 0; step <= steps; step++) {
-                const currentAngle = baseAngle + (step * 360) / steps;
-                const rad = (currentAngle * Math.PI) / 180;
-                xKeyframes.push(Math.round(Math.cos(rad) * radius));
-                yKeyframes.push(Math.round(Math.sin(rad) * radius));
-              }
-
-              return (
-                <motion.div
-                  key={software.name}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto group/icon cursor-pointer z-20 transform-gpu"
-                  animate={{
-                    x: xKeyframes,
-                    y: yKeyframes,
-                  }}
-                  transition={{
-                    x: { ease: 'linear', duration: isMobile ? 36 : 28, repeat: Infinity },
-                    y: { ease: 'linear', duration: isMobile ? 36 : 28, repeat: Infinity },
-                  }}
-                  whileHover={isMobile ? undefined : { scale: 1.25, zIndex: 40 }}
-                  whileTap={{ scale: 1.05 }}
-                  title={software.name}
-                >
-                  <div className="w-11 h-11 sm:w-13 sm:h-13 aspect-square flex items-center justify-center p-0.5 select-none transition-all duration-300 group-hover/icon:drop-shadow-[0_0_22px_rgba(34,211,238,0.95)]">
-                    {software.imageUrl ? (
-                      <img
-                        src={software.imageUrl}
-                        alt={software.name}
-                        className="w-full h-full max-w-full max-h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover/icon:brightness-125"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <span className="text-xs sm:text-sm tracking-wider font-extrabold text-white">
-                        {software.abbreviation}
-                      </span>
-                    )}
+                        {/* Tooltip badge - always upright, level and straight */}
+                        <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-950/95 border border-cyan-500/50 rounded-md px-2.5 py-1 text-[10px] font-sans font-bold whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-all duration-200 pointer-events-none text-cyan-300 shadow-2xl z-30 transform group-hover/icon:translate-y-0 translate-y-1">
+                          {software.name}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-
-                  {/* Tooltip badge - always upright, level and straight */}
-                  <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-950/95 border border-cyan-500/50 rounded-md px-2.5 py-1 text-[10px] font-sans font-bold whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-all duration-200 pointer-events-none text-cyan-300 shadow-2xl z-30 transform group-hover/icon:translate-y-0 translate-y-1">
-                    {software.name}
-                  </span>
-                </motion.div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </motion.section>
