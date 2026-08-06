@@ -19,7 +19,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -45,7 +45,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
   const sheenY = useTransform(mouseY, [-0.5, 0.5], ['0%', '100%']);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
+    if (isMobile || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -65,13 +65,13 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="perspective-1000 w-full relative group py-2"
+      className="perspective-1000 w-full relative group py-2 transform-gpu"
     >
       {/* TWO SPECIFIC DIAGONAL CORNER FEATHERED GLOWS - DUAL CYAN & PURPLE THEME */}
       
       {/* DIAGONAL CORNER 1: BOTTOM-LEFT (UNDER SKILLS & NAME) - VIBRANT CYAN #00E5FF GLOW */}
       <motion.div
-        animate={{
+        animate={isMobile ? undefined : {
           scale: [1, 1.06, 1],
           opacity: [0.55, 0.85, 0.55],
         }}
@@ -80,13 +80,13 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute -bottom-5 -left-5 sm:-bottom-8 sm:-left-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 shadow-[0_0_50px_rgba(0,229,255,0.35)]"
+        className={`absolute -bottom-5 -left-5 sm:-bottom-8 sm:-left-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-30' : 'blur-[36px] sm:blur-[44px]'}`}
         style={{ background: 'radial-gradient(circle, rgba(0, 229, 255, 0.45) 0%, transparent 70%)' }}
       />
 
       {/* DIAGONAL CORNER 2: TOP-RIGHT (ABOVE PICTURE/HEAD) - ELECTRIC PURPLE #7C3AED GLOW */}
       <motion.div
-        animate={{
+        animate={isMobile ? undefined : {
           scale: [1.03, 0.97, 1.03],
           opacity: [0.55, 0.85, 0.55],
         }}
@@ -95,7 +95,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute -top-5 -right-5 sm:-top-8 sm:-right-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full blur-[36px] sm:blur-[44px] pointer-events-none z-0 shadow-[0_0_50px_rgba(124,58,237,0.35)]"
+        className={`absolute -top-5 -right-5 sm:-top-8 sm:-right-8 w-56 h-56 sm:w-80 sm:h-80 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-30' : 'blur-[36px] sm:blur-[44px]'}`}
         style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.45) 0%, transparent 70%)' }}
       />
 
@@ -103,11 +103,11 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
       <motion.section
         id="home"
         style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d',
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
+          transformStyle: isMobile ? 'flat' : 'preserve-3d',
         }}
-        className="relative rounded-2xl overflow-hidden bg-[#070B14]/90 border border-slate-800/80 p-6 md:p-10 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] transition-all duration-300"
+        className="relative rounded-2xl overflow-hidden bg-[#070B14]/95 border border-slate-800/80 p-4 sm:p-6 md:p-10 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-6 lg:gap-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] transition-all duration-300 transform-gpu w-full max-w-full"
       >
         {/* GLOWING DUAL-TONE EDGE HIGHLIGHT BORDER (CYAN & PURPLE) */}
         <div className="absolute inset-0 rounded-2xl pointer-events-none p-[1px] bg-gradient-to-r from-cyan-400/40 via-fuchsia-300/25 to-purple-500/40 [mask-image:linear-gradient(white,white)]" />
@@ -117,7 +117,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
         
         {/* DIAGONAL 1: Animated Soft Cyan Light Orb Bottom-Left */}
         <motion.div
-          animate={{
+          animate={isMobile ? undefined : {
             scale: [1, 1.25, 1],
             opacity: [0.2, 0.45, 0.2],
           }}
@@ -126,12 +126,12 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -bottom-32 -left-32 w-[480px] h-[480px] bg-cyan-500/15 rounded-full blur-[100px] pointer-events-none"
+          className={`absolute -bottom-32 -left-32 w-[380px] sm:w-[480px] h-[380px] sm:h-[480px] bg-cyan-500/15 rounded-full pointer-events-none ${isMobile ? 'blur-2xl opacity-20' : 'blur-[100px]'}`}
         />
 
         {/* DIAGONAL 2: Animated Soft Purple Light Orb Top-Right */}
         <motion.div
-          animate={{
+          animate={isMobile ? undefined : {
             scale: [1.2, 1, 1.2],
             opacity: [0.25, 0.45, 0.25],
           }}
@@ -140,59 +140,61 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -top-32 -right-32 w-[480px] h-[480px] bg-purple-500/15 rounded-full blur-[100px] pointer-events-none"
+          className={`absolute -top-32 -right-32 w-[380px] sm:w-[480px] h-[380px] sm:h-[480px] bg-purple-500/15 rounded-full pointer-events-none ${isMobile ? 'blur-2xl opacity-20' : 'blur-[100px]'}`}
         />
 
         {/* Dynamic Specular Sheen Overlay */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none z-10 opacity-25 group-hover:opacity-50 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(circle at ${sheenX} ${sheenY}, rgba(34,211,238,0.15), transparent 55%)`,
-          }}
-        />
+        {!isMobile && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none z-10 opacity-25 group-hover:opacity-50 transition-opacity duration-500"
+            style={{
+              background: `radial-gradient(circle at ${sheenX} ${sheenY}, rgba(34,211,238,0.15), transparent 55%)`,
+            }}
+          />
+        )}
 
         {/* LEFT TEXT CONTENT - ELEVATED ON 3D Z-AXIS */}
         <div 
-          className="relative z-20 max-w-xl xl:max-w-2xl space-y-4 text-center lg:text-left"
-          style={{ transform: 'translateZ(30px)' }}
+          className="relative z-20 w-full max-w-full lg:max-w-xl xl:max-w-2xl space-y-3.5 sm:space-y-4 text-center lg:text-left overflow-hidden px-1"
+          style={{ transform: isMobile ? 'none' : 'translateZ(30px)' }}
         >
           {/* SMALL PROFESSIONAL INTRO BADGE */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-1.5 bg-cyan-950/60 border border-cyan-500/40 rounded-full text-[11px] font-mono font-semibold tracking-wider uppercase text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
-            <Sparkles size={11} className="text-cyan-400 animate-pulse" />
-            <span>{hero.introBadge || 'Hello, I am'}</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-1 bg-cyan-950/60 border border-cyan-500/40 rounded-full text-[10px] sm:text-[11px] font-mono font-semibold tracking-wider uppercase text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.2)] max-w-full break-words">
+            <Sparkles size={11} className="text-cyan-400 animate-pulse shrink-0" />
+            <span className="truncate">{hero.introBadge || 'Hello, I am'}</span>
           </div>
 
-          {/* PROMINENT RE-STYLED NAME DISPLAY (ALL CAPS, NON-ITALIC, REDUCED FONT SIZE) */}
-          <div className="space-y-1 font-sans not-italic font-black tracking-tight leading-none">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[58px] uppercase text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+          {/* PROMINENT RE-STYLED NAME DISPLAY */}
+          <div className="space-y-1 font-sans not-italic font-black tracking-tight leading-tight w-full max-w-full break-words [overflow-wrap:anywhere]">
+            <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-[58px] uppercase text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] break-words [overflow-wrap:anywhere]">
               {hero.firstName}
             </h1>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[58px] uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-purple-400 drop-shadow-[0_0_20px_rgba(34,211,238,0.35)]">
+            <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-[58px] uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-purple-400 drop-shadow-[0_0_20px_rgba(34,211,238,0.35)] break-words [overflow-wrap:anywhere]">
               {hero.lastName}
             </h2>
           </div>
 
-          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-display text-white leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-[32px] font-bold font-display text-white leading-tight tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] break-words [overflow-wrap:anywhere]">
             <span className="bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-purple-400 bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(34,211,238,0.25)]">
               {hero.title}
             </span>
           </h3>
 
-          <p className="text-xs sm:text-sm text-slate-300/90 max-w-xl leading-relaxed font-sans">
+          <p className="text-xs sm:text-sm text-slate-300/90 max-w-xl leading-relaxed font-sans break-words [overflow-wrap:anywhere]">
             {hero.subtitle}
           </p>
 
-          {/* Slow Moving Marquee with 3D Depth */}
+          {/* Slow Moving Marquee */}
           <div 
-            className="w-full overflow-hidden bg-slate-950/80 border border-slate-800/80 rounded-xl py-3 relative mt-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-            style={{ transform: 'translateZ(15px)' }}
+            className="w-full max-w-full overflow-hidden bg-slate-950/80 border border-slate-800/80 rounded-xl py-2.5 sm:py-3 relative mt-3 sm:mt-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+            style={{ transform: isMobile ? 'none' : 'translateZ(15px)' }}
           >
             {/* Blur edges */}
-            <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
 
             <motion.div
-              className="flex whitespace-nowrap gap-8"
+              className="flex whitespace-nowrap gap-6 sm:gap-8"
               animate={{ x: ['0%', '-50%'] }}
               transition={{ ease: 'linear', duration: 40, repeat: Infinity }}
               style={{ width: 'fit-content' }}
@@ -211,9 +213,9 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
                   ? hero.tickerSkills
                   : ['Professional Video Editor', 'Graphic Designer', 'AI Specialist', 'Social Media Marketer']),
               ].map((skill, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 shrink-0">
-                  <span className="text-cyan-400 font-mono text-xs">✦</span>
-                  <span className="text-xs sm:text-sm font-syne font-bold text-slate-200 uppercase tracking-wider">
+                <div key={idx} className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+                  <span className="text-cyan-400 font-mono text-[10px] sm:text-xs">✦</span>
+                  <span className="text-[11px] sm:text-sm font-syne font-bold text-slate-200 uppercase tracking-wider">
                     {skill}
                   </span>
                 </div>
@@ -222,13 +224,13 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           </div>
         </div>
 
-        {/* RIGHT SOFTWARE SUITE RADIAL STAGE - HIGH 3D DEPTH (translateZ 50px) */}
+        {/* RIGHT SOFTWARE SUITE RADIAL STAGE */}
         <div
-          className="relative w-full max-w-[340px] sm:max-w-[420px] aspect-square flex items-center justify-center shrink-0 my-2 lg:my-0 lg:mr-2 z-20"
-          style={{ transform: 'translateZ(50px)' }}
+          className="relative w-full max-w-[280px] sm:max-w-[360px] md:max-w-[420px] aspect-square flex items-center justify-center shrink-0 my-2 lg:my-0 lg:mr-2 z-20"
+          style={{ transform: isMobile ? 'none' : 'translateZ(50px)' }}
         >
           {/* Center photo avatar of Tashfiq - Elevated with Dual Cyan & Purple Glow */}
-          <div className="relative w-36 h-36 sm:w-48 sm:h-48 rounded-full border-2 sm:border-3 border-cyan-400/80 p-1.5 shadow-[0_0_30px_rgba(34,211,238,0.35)] z-20 group/avatar overflow-hidden bg-slate-900">
+          <div className="relative w-32 h-32 sm:w-44 sm:h-44 md:w-48 md:h-48 rounded-full border-2 sm:border-3 border-cyan-400/80 p-1.5 shadow-[0_0_30px_rgba(34,211,238,0.35)] z-20 group/avatar overflow-hidden bg-slate-900">
             <img
               src={hero.avatarUrl || avatarUrl}
               alt="Tashfiq Ahmed Tamim"
@@ -238,14 +240,14 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
           </div>
 
           {/* Outer Orbit Tracks with Subtle Cyan & Purple Glow */}
-          <div className="absolute w-[224px] h-[224px] sm:w-[280px] sm:h-[280px] rounded-full border border-dashed border-cyan-400/40 animate-spin-slow pointer-events-none shadow-[0_0_15px_rgba(34,211,238,0.2)]" />
-          <div className="absolute w-[248px] h-[248px] sm:w-[310px] sm:h-[310px] rounded-full border border-purple-400/25 pointer-events-none" />
+          <div className="absolute w-[190px] h-[190px] sm:w-[260px] sm:h-[260px] rounded-full border border-dashed border-cyan-400/40 animate-spin-slow pointer-events-none shadow-[0_0_15px_rgba(34,211,238,0.2)]" />
+          <div className="absolute w-[210px] h-[210px] sm:w-[290px] sm:h-[290px] rounded-full border border-purple-400/25 pointer-events-none" />
 
-          {/* Orbiting Software PNG Logos - Uniform Size, Balanced Distance & Smooth Subtle Zoom */}
+          {/* Smooth Orbiting Ring for Software PNG Logos - Completely Upright & Straight */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             {SOFTWARES.map((software: SoftwareIcon, idx: number) => {
               const baseAngle = (idx * 360) / SOFTWARES.length;
-              const radius = isMobile ? 112 : 140; // Balanced orbit distance for Mobile & Desktop
+              const radius = isMobile ? 95 : 140;
 
               const steps = 36;
               const xKeyframes: number[] = [];
@@ -261,18 +263,17 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
               return (
                 <motion.div
                   key={software.name}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto group/icon cursor-pointer z-20"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto group/icon cursor-pointer z-20 transform-gpu"
                   animate={{
                     x: xKeyframes,
                     y: yKeyframes,
                   }}
                   transition={{
-                    x: { ease: 'linear', duration: 28, repeat: Infinity },
-                    y: { ease: 'linear', duration: 28, repeat: Infinity },
-                    scale: { type: 'spring', stiffness: 350, damping: 22 },
+                    x: { ease: 'linear', duration: isMobile ? 36 : 28, repeat: Infinity },
+                    y: { ease: 'linear', duration: isMobile ? 36 : 28, repeat: Infinity },
                   }}
-                  whileHover={{ scale: 1.25, zIndex: 40 }}
-                  whileTap={{ scale: 1.08 }}
+                  whileHover={isMobile ? undefined : { scale: 1.25, zIndex: 40 }}
+                  whileTap={{ scale: 1.05 }}
                   title={software.name}
                 >
                   <div className="w-11 h-11 sm:w-13 sm:h-13 aspect-square flex items-center justify-center p-0.5 select-none transition-all duration-300 group-hover/icon:drop-shadow-[0_0_22px_rgba(34,211,238,0.95)]">
@@ -280,7 +281,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
                       <img
                         src={software.imageUrl}
                         alt={software.name}
-                        className="w-full h-full max-w-full max-h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover/icon:brightness-125"
+                        className="w-full h-full max-w-full max-h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover/icon:brightness-125"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
@@ -290,7 +291,7 @@ export default function HeroBanner3D({ avatarUrl }: HeroBanner3DProps) {
                     )}
                   </div>
 
-                  {/* Tooltip badge */}
+                  {/* Tooltip badge - always upright, level and straight */}
                   <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-950/95 border border-cyan-500/50 rounded-md px-2.5 py-1 text-[10px] font-sans font-bold whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-all duration-200 pointer-events-none text-cyan-300 shadow-2xl z-30 transform group-hover/icon:translate-y-0 translate-y-1">
                     {software.name}
                   </span>

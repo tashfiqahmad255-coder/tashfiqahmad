@@ -9,12 +9,22 @@ interface ClickRipple {
 }
 
 export default function CustomMouseEffects() {
+  const [isMobile, setIsMobile] = useState(false);
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
   const [ripples, setRipples] = useState<ClickRipple[]>([]);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Web Audio Context for zero-latency, smooth sound effects
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -192,6 +202,10 @@ export default function CustomMouseEffects() {
   const removeRipple = (id: number) => {
     setRipples((prev) => prev.filter((r) => r.id !== id));
   };
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <>

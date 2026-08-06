@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronRight, ChevronLeft, Sparkles, Play, Edit3 } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
@@ -6,13 +6,23 @@ import { useSiteData } from '../context/SiteDataContext';
 export default function FeaturedShowreel() {
   const { siteData, openEditorTo } = useSiteData();
   const showreel = siteData.showreel;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const bgStyle = showreel.bgStyle || 'matte-black';
   const showGlow = showreel.showGlow ?? false;
 
-  // Format YouTube URL into proper embed URL with modestbranding to hide YouTube logos/branding
+  // Format YouTube URL into proper embed URL with high quality parameters and modestbranding
   const getEmbedUrl = (rawUrl: string) => {
-    if (!rawUrl) return 'https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white';
+    if (!rawUrl) return 'https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1';
     
     // Extract ID from shorts link, standard link or embed link
     let videoId = '';
@@ -31,7 +41,7 @@ export default function FeaturedShowreel() {
     }
 
     if (videoId) {
-      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white`;
+      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
     }
 
     return rawUrl;
@@ -41,7 +51,7 @@ export default function FeaturedShowreel() {
 
   const containerBgClass = bgStyle === 'matte-black'
     ? 'bg-black border-zinc-800/90 shadow-[0_20px_50px_rgba(0,0,0,1)]'
-    : 'bg-[#070B14]/90 border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)]';
+    : 'bg-[#070B14] border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)]';
 
   return (
     <motion.section
@@ -50,7 +60,7 @@ export default function FeaturedShowreel() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative rounded-[30px] overflow-hidden ${containerBgClass} p-6 md:p-12 backdrop-blur-xl transition-all duration-300`}
+      className={`relative rounded-[30px] overflow-hidden ${containerBgClass} p-4 sm:p-8 md:p-12 ${isMobile ? '' : 'backdrop-blur-xl'} transition-all duration-300 transform-gpu w-full max-w-full`}
     >
       {/* GLOWING DUAL-TONE EDGE HIGHLIGHT BORDER - ONLY SHOWN IF GRADIENT OPTION ACTIVE */}
       {showGlow && (
@@ -62,7 +72,7 @@ export default function FeaturedShowreel() {
         <>
           {/* Left side soft cyan glow */}
           <motion.div
-            animate={{
+            animate={isMobile ? undefined : {
               scale: [1, 1.15, 1],
               opacity: [0.35, 0.55, 0.35],
             }}
@@ -71,13 +81,13 @@ export default function FeaturedShowreel() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(0,229,255,0.25)]"
+            className={`absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl shadow-[0_0_60px_rgba(0,229,255,0.25)]'}`}
             style={{ background: 'radial-gradient(circle, rgba(0, 229, 255, 0.35) 0%, transparent 70%)' }}
           />
 
           {/* Top-Right soft purple glow */}
           <motion.div
-            animate={{
+            animate={isMobile ? undefined : {
               scale: [1.15, 0.95, 1.15],
               opacity: [0.3, 0.5, 0.3],
             }}
@@ -86,7 +96,7 @@ export default function FeaturedShowreel() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none z-0 shadow-[0_0_60px_rgba(124,58,237,0.25)]"
+            className={`absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl shadow-[0_0_60px_rgba(124,58,237,0.25)]'}`}
             style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.35) 0%, transparent 70%)' }}
           />
         </>
@@ -140,9 +150,9 @@ export default function FeaturedShowreel() {
           {/* CENTER 9:16 VERTICAL VIDEO CARD WRAPPER WITH AURORA GLOW */}
           <div className="relative w-full max-w-[290px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] aspect-[9/16] flex items-center justify-center">
             
-            {/* LAYER 1: ROTATING MULTI-COLOR AURORA CONIC BLOOM (CYAN & PURPLE & FUCHSIA) */}
+            {/* LAYER 1: MULTI-COLOR AURORA BLOOM (STATIC & SMOOTH ON MOBILE, ROTATING ON DESKTOP) */}
             <motion.div
-              animate={{
+              animate={isMobile ? undefined : {
                 rotate: [0, 180, 360],
                 scale: [0.95, 1.05, 0.95],
                 opacity: [0.65, 0.85, 0.65],
@@ -152,54 +162,60 @@ export default function FeaturedShowreel() {
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute -inset-8 sm:-inset-12 rounded-[40px] bg-[conic-gradient(from_0deg_at_50%_50%,#06b6d4_0deg,#a855f7_90deg,#38bdf8_180deg,#c084fc_270deg,#06b6d4_360deg)] blur-3xl pointer-events-none opacity-75 z-0"
+              className={`absolute -inset-6 sm:-inset-12 rounded-[40px] bg-[conic-gradient(from_0deg_at_50%_50%,#06b6d4_0deg,#a855f7_90deg,#38bdf8_180deg,#c084fc_270deg,#06b6d4_360deg)] pointer-events-none z-0 transform-gpu ${isMobile ? 'blur-xl opacity-40' : 'blur-3xl opacity-75'}`}
             />
 
-            {/* LAYER 2: PULSING SOFT NEON RADIAL AURA */}
-            <motion.div
-              animate={{
-                scale: [1, 1.08, 1],
-                opacity: [0.55, 0.85, 0.55],
-              }}
-              transition={{
-                duration: 7,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute -inset-4 sm:-inset-6 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.65)_0%,rgba(168,85,247,0.55)_50%,rgba(56,189,248,0.4)_80%,transparent_100%)] blur-2xl pointer-events-none z-0"
-            />
+            {/* LAYER 2: SOFT NEON RADIAL AURA (DESKTOP ONLY) */}
+            {!isMobile && (
+              <motion.div
+                animate={{
+                  scale: [1, 1.08, 1],
+                  opacity: [0.55, 0.85, 0.55],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="absolute -inset-4 sm:-inset-6 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.65)_0%,rgba(168,85,247,0.55)_50%,rgba(56,189,248,0.4)_80%,transparent_100%)] blur-2xl pointer-events-none z-0"
+              />
+            )}
 
-            {/* LAYER 3: CINEMATIC ACCENT LIGHT BLOOMS (TOP-LEFT & BOTTOM-RIGHT) */}
-            <motion.div
-              animate={{
-                scale: [0.9, 1.2, 0.9],
-                opacity: [0.5, 0.85, 0.5],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 blur-2xl pointer-events-none z-0 opacity-60"
-            />
-            <motion.div
-              animate={{
-                scale: [1.2, 0.9, 1.2],
-                opacity: [0.5, 0.85, 0.5],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-gradient-to-tl from-purple-500 to-fuchsia-600 blur-2xl pointer-events-none z-0 opacity-60"
-            />
+            {/* LAYER 3: CINEMATIC ACCENT LIGHT BLOOMS (DESKTOP ONLY) */}
+            {!isMobile && (
+              <>
+                <motion.div
+                  animate={{
+                    scale: [0.9, 1.2, 0.9],
+                    opacity: [0.5, 0.85, 0.5],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 blur-2xl pointer-events-none z-0 opacity-60"
+                />
+                <motion.div
+                  animate={{
+                    scale: [1.2, 0.9, 1.2],
+                    opacity: [0.5, 0.85, 0.5],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-gradient-to-tl from-purple-500 to-fuchsia-600 blur-2xl pointer-events-none z-0 opacity-60"
+                />
+              </>
+            )}
 
             {/* VIDEO CARD CONTAINER */}
             <motion.div
-              whileHover={{ scale: 1.02 }}
+              whileHover={isMobile ? undefined : { scale: 1.02 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="relative z-10 w-full h-full rounded-[24px] overflow-hidden bg-slate-950 border border-cyan-500/40 p-1 shadow-[0_20px_50px_rgba(0,0,0,0.9)] shadow-cyan-500/20 group transition-all duration-300 hover:border-cyan-300/80 hover:shadow-[0_25px_60px_rgba(34,211,238,0.4)]"
+              className="relative z-10 w-full h-full rounded-[24px] overflow-hidden bg-slate-950 border border-cyan-500/40 p-1 shadow-[0_20px_50px_rgba(0,0,0,0.9)] shadow-cyan-500/20 group transition-all duration-300 hover:border-cyan-300/80 hover:shadow-[0_25px_60px_rgba(34,211,238,0.4)] transform-gpu"
             >
               {/* INNER CONTAINER WITH EMBEDDED PLAYER */}
               <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-black">

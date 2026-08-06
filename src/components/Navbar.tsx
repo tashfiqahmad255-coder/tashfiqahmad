@@ -87,13 +87,13 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <span className="text-sm font-extrabold font-display tracking-tight text-white group-hover:text-cyan-300 transition-all uppercase">
+          <div className="flex flex-col min-w-0">
+            <span className="text-xs sm:text-sm font-extrabold font-display tracking-tight text-white group-hover:text-cyan-300 transition-all uppercase truncate max-w-[130px] xs:max-w-[170px] sm:max-w-none">
               {t.ownerName}
             </span>
-            <span className="text-[10px] font-mono text-cyan-400 font-semibold uppercase tracking-widest flex items-center gap-1.5">
-              <span>{t.subtitle}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block animate-pulse" />
+            <span className="text-[9px] sm:text-[10px] font-mono text-cyan-400 font-semibold uppercase tracking-widest flex items-center gap-1.5 truncate">
+              <span className="truncate">{t.subtitle}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block animate-pulse shrink-0" />
             </span>
           </div>
         </div>

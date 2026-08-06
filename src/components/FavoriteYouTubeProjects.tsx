@@ -82,8 +82,8 @@ export default function FavoriteYouTubeProjects() {
           {videosToDisplay.map((video, idx) => {
             const ytId = extractYouTubeId(video.youtubeUrl);
             const embedUrl = ytId
-              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`
-              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&rel=0&modestbranding=1';
+              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1`
+              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1';
             const fullUrl = video.youtubeUrl || `https://youtu.be/${ytId}`;
             const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '';
 

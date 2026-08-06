@@ -15,6 +15,11 @@ export default function WaterRippleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    // Check if mobile or touch device and skip canvas on mobile for optimal performance
+    if (window.innerWidth < 768 || 'ontouchstart' in window) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 

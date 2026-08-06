@@ -127,7 +127,7 @@ function MainPortfolioContent() {
       <Navbar />
 
       {/* MAIN LAYOUT CONTAINER */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 pt-24 md:pt-28 space-y-16 relative z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 md:px-8 py-4 pt-20 md:pt-28 space-y-12 md:space-y-16 relative z-10 overflow-x-hidden">
         
         {/* HERO BANNER SECTION (#home) */}
         <HeroBanner3D avatarUrl={AVATAR} />

@@ -158,11 +158,11 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
       />
 
       {/* ==================== ABOUT ME SECTION ==================== */}
-      <section id="about" className="scroll-mt-24 bg-black/80 backdrop-blur-2xl border border-cyan-500/20 rounded-3xl p-6 sm:p-10 md:p-12 shadow-[0_0_50px_rgba(34,211,238,0.08)] relative overflow-hidden z-10">
+      <section id="about" className="scroll-mt-24 bg-black/80 backdrop-blur-2xl border border-cyan-500/20 rounded-3xl p-4 sm:p-8 md:p-12 shadow-[0_0_50px_rgba(34,211,238,0.08)] relative overflow-hidden z-10 w-full max-w-full">
         {/* Corner Dual Accent Line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500/60 via-fuchsia-400/50 to-purple-500/60" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full max-w-full">
           
           {/* LEFT COLUMN: Profile Photo with subtle Dual Glow & Floating Animation */}
           <div className="lg:col-span-4 flex justify-center lg:justify-start">
@@ -175,7 +175,7 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
               <div className="absolute -inset-3 bg-gradient-to-tr from-cyan-500/35 via-fuchsia-400/25 to-purple-600/35 rounded-3xl blur-2xl group-hover:opacity-100 opacity-70 transition-all duration-700" />
 
               {/* Profile Image Frame */}
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl p-1 bg-gradient-to-b from-cyan-400/60 via-fuchsia-400/30 to-purple-900/50 shadow-2xl overflow-hidden">
+              <div className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-2xl p-1 bg-gradient-to-b from-cyan-400/60 via-fuchsia-400/30 to-purple-900/50 shadow-2xl overflow-hidden">
                 <img
                   id="artist-avatar"
                   src={avatarImage}
@@ -196,16 +196,16 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
           </div>
 
           {/* RIGHT COLUMN: About Me Content */}
-          <div className="lg:col-span-8 space-y-6 text-left">
+          <div className="lg:col-span-8 space-y-5 sm:space-y-6 text-left w-full max-w-full overflow-hidden">
             
             {/* Section Eyebrow Title */}
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 backdrop-blur-md max-w-full"
             >
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping shrink-0" />
               <span className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">
                 ABOUT ME
               </span>
@@ -217,7 +217,7 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-black font-display text-white tracking-tight leading-tight"
+              className="text-2xl sm:text-4xl lg:text-5xl font-black font-display text-white tracking-tight leading-tight break-words [overflow-wrap:anywhere]"
             >
               Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-purple-400">Tashfiq Ahmad Tamim</span>.
             </motion.h2>
@@ -228,7 +228,7 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-4 text-sm sm:text-base text-slate-300 font-sans leading-relaxed font-normal"
+              className="space-y-3.5 sm:space-y-4 text-xs sm:text-base text-slate-300 font-sans leading-relaxed font-normal break-words [overflow-wrap:anywhere]"
             >
               <p className="text-cyan-200/90 font-medium">
                 Professional Video Editor, Graphic Designer, AI Specialist &amp; Social Media Marketer based in Bangladesh.
@@ -257,17 +257,17 @@ export default function AboutContact({ avatarImage }: AboutContactProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="pt-3 flex flex-wrap gap-2.5 sm:gap-3"
+              className="pt-2 sm:pt-3 flex flex-wrap gap-2 sm:gap-3 max-w-full"
             >
               {badges.map((badge, idx) => {
                 const Icon = badge.icon;
                 return (
                   <div
                     key={idx}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium shadow-md backdrop-blur-md hover:border-cyan-400 hover:bg-cyan-500/10 hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] transition-all duration-300"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-[11px] sm:text-xs md:text-sm font-medium shadow-md backdrop-blur-md hover:border-cyan-400 hover:bg-cyan-500/10 hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] transition-all duration-300 max-w-full break-words"
                   >
-                    <Icon size={16} className="text-cyan-400 shrink-0" />
-                    <span>{badge.label}</span>
+                    <Icon size={15} className="text-cyan-400 shrink-0" />
+                    <span className="break-words">{badge.label}</span>
                   </div>
                 );
               })}
