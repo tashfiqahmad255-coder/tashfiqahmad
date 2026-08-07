@@ -14,7 +14,6 @@ import HeroBanner3D from './components/HeroBanner3D';
 import FeaturedShowreel from './components/FeaturedShowreel';
 import FavoriteYouTubeProjects from './components/FavoriteYouTubeProjects';
 import Navbar from './components/Navbar';
-import SiteEditorDrawer from './components/SiteEditorDrawer';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { SiteDataProvider, useSiteData } from './context/SiteDataContext';
 import { 
@@ -378,9 +377,6 @@ function MainPortfolioContent() {
           </div>
         )}
       </AnimatePresence>
-
-      {/* FLOATING SITE EDITOR DRAWER AT BOTTOM LEFT */}
-      <SiteEditorDrawer />
 
     </div>
   );

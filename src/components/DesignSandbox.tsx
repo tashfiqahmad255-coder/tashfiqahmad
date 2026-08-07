@@ -44,7 +44,6 @@ const PALETTES: PaletteTheme[] = [
 ];
 
 export default function DesignSandbox({ showcaseImage }: DesignSandboxProps) {
-  const { openEditorTo } = useSiteData();
   const [sliderPosition, setSliderPosition] = useState(50);
   const [activePalette, setActivePalette] = useState<PaletteTheme>(PALETTES[0]);
   const [layerTiger, setLayerTiger] = useState(true);

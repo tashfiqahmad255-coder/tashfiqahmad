@@ -40,7 +40,6 @@ const FILTERS: VideoFilter[] = [
 ];
 
 export default function ShowreelSandbox({ heroImage }: ShowreelSandboxProps) {
-  const { openEditorTo } = useSiteData();
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(35);
   const [activeFilter, setActiveFilter] = useState<VideoFilter>(FILTERS[1]); // Default to Dhaka Sunset
