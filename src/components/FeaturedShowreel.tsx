@@ -70,36 +70,18 @@ export default function FeaturedShowreel() {
         <div className="absolute inset-0 rounded-[30px] pointer-events-none p-[1px] bg-gradient-to-r from-cyan-500/40 via-fuchsia-400/25 to-purple-500/40 [mask-image:linear-gradient(white,white)] z-10" />
       )}
 
-      {/* BACKGROUND AMBIENT GLOW ORBS - ONLY SHOWN IF GLOW IS EXPLICITLY TURNED ON */}
+      {/* BACKGROUND AMBIENT GLOW ORBS - STATIC ELEGANT AMBIENCE */}
       {showGlow && (
         <>
           {/* Left side soft cyan glow */}
-          <motion.div
-            animate={isMobile ? undefined : {
-              scale: [1, 1.15, 1],
-              opacity: [0.35, 0.55, 0.35],
-            }}
-            transition={{
-              duration: 7,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className={`absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl shadow-[0_0_60px_rgba(0,229,255,0.25)]'}`}
+          <div
+            className={`absolute -top-10 -left-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl opacity-40 shadow-[0_0_60px_rgba(0,229,255,0.25)]'}`}
             style={{ background: 'radial-gradient(circle, rgba(0, 229, 255, 0.35) 0%, transparent 70%)' }}
           />
 
           {/* Top-Right soft purple glow */}
-          <motion.div
-            animate={isMobile ? undefined : {
-              scale: [1.15, 0.95, 1.15],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 7.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className={`absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl shadow-[0_0_60px_rgba(124,58,237,0.25)]'}`}
+          <div
+            className={`absolute -top-10 -right-10 w-72 h-72 sm:w-96 sm:h-96 rounded-full pointer-events-none z-0 ${isMobile ? 'blur-2xl opacity-25' : 'blur-3xl opacity-40 shadow-[0_0_60px_rgba(124,58,237,0.25)]'}`}
             style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.35) 0%, transparent 70%)' }}
           />
         </>
@@ -153,62 +135,25 @@ export default function FeaturedShowreel() {
           {/* CENTER 9:16 VERTICAL VIDEO CARD WRAPPER WITH AURORA GLOW */}
           <div className="relative w-full max-w-[290px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] aspect-[9/16] flex items-center justify-center">
             
-            {/* LAYER 1: MULTI-COLOR AURORA BLOOM (STATIC & SMOOTH ON MOBILE, ROTATING ON DESKTOP) */}
-            <motion.div
-              animate={isMobile ? undefined : {
-                rotate: [0, 180, 360],
-                scale: [0.95, 1.05, 0.95],
-                opacity: [0.65, 0.85, 0.65],
-              }}
-              transition={{
-                duration: 9,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className={`absolute -inset-6 sm:-inset-12 rounded-[40px] bg-[conic-gradient(from_0deg_at_50%_50%,#06b6d4_0deg,#a855f7_90deg,#38bdf8_180deg,#c084fc_270deg,#06b6d4_360deg)] pointer-events-none z-0 transform-gpu ${isMobile ? 'blur-xl opacity-40' : 'blur-3xl opacity-75'}`}
+            {/* LAYER 1: MULTI-COLOR AURORA BLOOM (STATIONARY STILL BEAUTIFUL GRADIENT) */}
+            <div
+              className={`absolute -inset-6 sm:-inset-12 rounded-[40px] bg-[conic-gradient(from_130deg_at_50%_50%,#06b6d4_0deg,#a855f7_90deg,#38bdf8_180deg,#c084fc_270deg,#06b6d4_360deg)] pointer-events-none z-0 transform-gpu ${isMobile ? 'blur-xl opacity-40' : 'blur-3xl opacity-75'}`}
             />
 
-            {/* LAYER 2: SOFT NEON RADIAL AURA (DESKTOP ONLY) */}
+            {/* LAYER 2: SOFT NEON RADIAL AURA (STATIC BEAUTIFUL GRADIENT) */}
             {!isMobile && (
-              <motion.div
-                animate={{
-                  scale: [1, 1.08, 1],
-                  opacity: [0.55, 0.85, 0.55],
-                }}
-                transition={{
-                  duration: 7,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="absolute -inset-4 sm:-inset-6 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.65)_0%,rgba(168,85,247,0.55)_50%,rgba(56,189,248,0.4)_80%,transparent_100%)] blur-2xl pointer-events-none z-0"
+              <div
+                className="absolute -inset-4 sm:-inset-6 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.65)_0%,rgba(168,85,247,0.55)_50%,rgba(56,189,248,0.4)_80%,transparent_100%)] blur-2xl pointer-events-none z-0 opacity-70"
               />
             )}
 
-            {/* LAYER 3: CINEMATIC ACCENT LIGHT BLOOMS (DESKTOP ONLY) */}
+            {/* LAYER 3: CINEMATIC ACCENT LIGHT BLOOMS (STATIC) */}
             {!isMobile && (
               <>
-                <motion.div
-                  animate={{
-                    scale: [0.9, 1.2, 0.9],
-                    opacity: [0.5, 0.85, 0.5],
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                <div
                   className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 blur-2xl pointer-events-none z-0 opacity-60"
                 />
-                <motion.div
-                  animate={{
-                    scale: [1.2, 0.9, 1.2],
-                    opacity: [0.5, 0.85, 0.5],
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                <div
                   className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-gradient-to-tl from-purple-500 to-fuchsia-600 blur-2xl pointer-events-none z-0 opacity-60"
                 />
               </>
