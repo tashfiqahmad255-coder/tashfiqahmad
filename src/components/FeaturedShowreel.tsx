@@ -114,13 +114,13 @@ export default function FeaturedShowreel() {
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 backdrop-blur-md">
             <Sparkles size={13} className="text-cyan-400 animate-pulse" />
             <span className="text-xs font-mono font-bold tracking-wider text-cyan-400 uppercase">
-              {showreel.label || 'LATEST SHOWREEL'}
+              {showreel.label || 'MY CREATIVE JOURNEY'}
             </span>
           </div>
 
           {/* Main Heading */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-display text-white tracking-tight">
-            {showreel.heading || 'WATCH MY SHOWREEL'}
+            {showreel.heading || 'MY CREATIVE JOURNEY'}
           </h2>
         </div>
 

@@ -101,8 +101,8 @@ const DEFAULT_HERO: HeroData = {
 };
 
 const DEFAULT_SHOWREEL: ShowreelData = {
-  label: 'LATEST SHOWREEL',
-  heading: 'WATCH MY SHOWREEL',
+  label: 'MY CREATIVE JOURNEY',
+  heading: 'MY CREATIVE JOURNEY',
   youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
 };
 
@@ -253,10 +253,12 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         cleanBio1 = cleanBio1.replace(/AS Specialist/g, 'AI Specialist').replace(/\bAS\b/g, 'AI');
         cleanBio2 = cleanBio2.replace(/AS workflows/g, 'AI workflows').replace(/\bAS\b/g, 'AI');
 
-        // Enforce exact hardcoded video URLs so they never get mixed up from stale localStorage
+        // Enforce exact hardcoded video URLs and heading so they stay clean
         const cleanShowreel = {
           ...DEFAULT_SHOWREEL,
           ...parsed.showreel,
+          label: 'MY CREATIVE JOURNEY',
+          heading: 'MY CREATIVE JOURNEY',
           youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
         };
 
