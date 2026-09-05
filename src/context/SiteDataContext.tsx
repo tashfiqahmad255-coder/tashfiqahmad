@@ -103,7 +103,7 @@ const DEFAULT_HERO: HeroData = {
 const DEFAULT_SHOWREEL: ShowreelData = {
   label: 'MY CREATIVE JOURNEY',
   heading: 'MY CREATIVE JOURNEY',
-  youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
+  youtubeUrl: 'https://youtube.com/shorts/1FXnOfA_uuM?feature=share'
 };
 
 const DEFAULT_AI_WORKFLOW_VIDEOS: AiWorkflowVideo[] = [
@@ -198,7 +198,7 @@ const DEFAULT_SITE_DATA: SiteDataState = {
   adminPasskey: '2026'
 };
 
-const LOCAL_STORAGE_KEY = 'tashfiq_portfolio_cms_v3';
+const LOCAL_STORAGE_KEY = 'tashfiq_portfolio_cms_v4';
 
 interface SiteDataContextType {
   siteData: SiteDataState;
@@ -259,29 +259,13 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ...parsed.showreel,
           label: 'MY CREATIVE JOURNEY',
           heading: 'MY CREATIVE JOURNEY',
-          youtubeUrl: 'https://youtube.com/shorts/fFwFhNc523M?feature=share'
+          youtubeUrl: 'https://youtube.com/shorts/1FXnOfA_uuM?feature=share'
         };
 
-        const cleanVideoProjects = (parsed.videoProjects?.length === 6
+        const hasNewVideos = parsed.videoProjects && parsed.videoProjects.some((p: any) => p.youtubeUrl?.includes('GjE7dtwXYmI'));
+        const cleanVideoProjects = (parsed.videoProjects?.length === 9 && hasNewVideos)
           ? parsed.videoProjects
-          : VIDEO_PROJECTS
-        ).map((proj: any, idx: number) => {
-          if (idx === 0) {
-            return {
-              ...proj,
-              name: 'Featured Vertical Short #1',
-              youtubeUrl: 'https://youtube.com/shorts/hUaubQKbius?feature=share'
-            };
-          }
-          if (idx === 1) {
-            return {
-              ...proj,
-              name: 'Featured Vertical Short #2',
-              youtubeUrl: 'https://youtube.com/shorts/NDb6XfrtvuQ?feature=share'
-            };
-          }
-          return proj;
-        });
+          : VIDEO_PROJECTS;
 
         const cleanAiWorkflowVideos = (parsed.aiWorkflowVideos?.length === 3)
           ? parsed.aiWorkflowVideos

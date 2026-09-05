@@ -88,6 +88,42 @@ export const DESIGN_CATEGORIES = [
 
 export const VIDEO_PROJECTS: VideoProject[] = [
   {
+    id: 'vid_01_talkinghead',
+    name: 'Before After Talking Head',
+    category: 'YouTube Short / Reel',
+    description: 'Professional before & after talking head edit with dynamic framing, clean audio mastering, and color grading.',
+    clientName: 'Featured Project',
+    duration: '00:60 Min',
+    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
+    youtubeUrl: 'https://youtube.com/shorts/GjE7dtwXYmI',
+    highlights: ['Before & After', 'Talking Head', 'Color Grading'],
+    completionYear: 2026
+  },
+  {
+    id: 'vid_02_dynamiccomp',
+    name: 'Dynamic Vertical Reel Edit',
+    category: 'YouTube Short / Reel',
+    description: 'High-tempo vertical reel edit featuring fast cuts, motion graphics, and audio sync.',
+    clientName: 'Featured Project',
+    duration: '00:60 Min',
+    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects', 'CapCut'],
+    youtubeUrl: 'https://youtube.com/shorts/yv6bvPoPEzw',
+    highlights: ['Vertical Reel', 'Motion Graphics', 'Sound Design'],
+    completionYear: 2026
+  },
+  {
+    id: 'vid_03_motiongraphics',
+    name: 'Motion Graphics & Kinetic Reel',
+    category: 'YouTube Short / Reel',
+    description: 'Engaging vertical motion graphics edit with sleek kinetic typography and seamless transitions.',
+    clientName: 'Featured Project',
+    duration: '00:60 Min',
+    softwareUsed: ['Adobe After Effects', 'Adobe Premiere Pro'],
+    youtubeUrl: 'https://youtube.com/shorts/W9oWg03TyVs',
+    highlights: ['Motion Graphics', 'Kinetic Typography', 'Transitions'],
+    completionYear: 2026
+  },
+  {
     id: 'vid_01',
     name: 'Featured Vertical Short #1',
     category: 'YouTube Short / Reel',

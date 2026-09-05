@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Video, Paintbrush, Sliders, MapPin, CheckCircle2, ChevronRight, 
   Sparkles, Instagram, Github, Youtube, FileText, Send, Phone, 
-  MessageSquare, Star, ArrowUpRight, Award, Layers, ExternalLink, HelpCircle, Edit3, Play
+  MessageSquare, Star, ArrowUpRight, Award, Layers, ExternalLink, HelpCircle, Edit3, Play,
+  Maximize2, X
 } from 'lucide-react';
 import ShowreelSandbox from './components/ShowreelSandbox';
 import DesignSandbox from './components/DesignSandbox';
@@ -53,12 +54,11 @@ function getCleanVideoThumbnail(youtubeUrl?: string, customThumbUrl?: string): s
   return HERO_BANNER;
 }
 
-function getCleanYouTubeEmbedUrl(youtubeUrl?: string, autoplay = 1, mute = 0): string {
+function getCleanYouTubeEmbedUrl(youtubeUrl?: string, autoplay = 1, mute = 0, controls = 1): string {
   const ytId = extractYouTubeId(youtubeUrl);
-  if (ytId) {
-    return `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=${autoplay}&mute=${mute}&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white&vq=hd1080&hd=1`;
-  }
-  return `https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=${autoplay}&mute=${mute}&modestbranding=1&rel=0&iv_load_policy=3&controls=1&color=white&vq=hd1080&hd=1`;
+  const id = ytId || '1FXnOfA_uuM';
+  // Reliable Full HD 1080p stream parameters with enablejsapi and playsinline
+  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay}&mute=${mute}&controls=${controls}&playsinline=1&loop=1&playlist=${id}&rel=0&iv_load_policy=3&vq=hd1080&hd=1&enablejsapi=1&fs=1`;
 }
 
 function MainPortfolioContent() {
@@ -74,9 +74,21 @@ function MainPortfolioContent() {
   const [activePlayingVideo, setActivePlayingVideo] = useState<{ name: string; url: string } | null>(null);
   const [playingInlineId, setPlayingInlineId] = useState<string | null>(null);
   const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
+  const modalPlayerRef = useRef<HTMLDivElement>(null);
 
   const selectedVideo = videoProjects.find((p) => p.id === selectedVideoId) || videoProjects[0];
   const selectedDesign = designProjects.find((p) => p.id === selectedDesignId) || designProjects[0];
+
+  useEffect(() => {
+    if (!activePlayingVideo) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActivePlayingVideo(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activePlayingVideo]);
 
   return (
     <div className="min-h-screen bg-[#070B14] text-slate-100 flex flex-col font-sans selection:bg-[#00E5FF] selection:text-slate-950 relative overflow-x-hidden">
@@ -172,23 +184,24 @@ function MainPortfolioContent() {
             </button>
           </div>
 
-          {/* 6-ITEM REELS GRID: 2 COLUMNS ON MOBILE (LIKE INSTAGRAM/TIKTOK FEED), 3 COLUMNS ON PC */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6 max-w-3xl mx-auto relative z-10">
-            {videoProjects.slice(0, 6).map((project, index) => {
+          {/* 9-ITEM REELS GRID: 2 COLUMNS ON MOBILE, 3 COLUMNS ON PC */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6 max-w-4xl mx-auto relative z-10">
+            {videoProjects.map((project, index) => {
               const ytId = extractYouTubeId(project.youtubeUrl);
               const fullUrl = project.youtubeUrl || `https://youtube.com/shorts/${ytId}`;
 
               const isHovered = hoveredVideoId === project.id;
-              const isInlinePlaying = playingInlineId === project.id;
-              const isPlaying = isInlinePlaying || isHovered;
+              const isPlaying = isHovered || playingInlineId === project.id;
 
-              // On hover, autoplay muted so browser allows instant play; on inline click play unmuted
+              // Autoplay muted when hovered for immediate, silent preview; unmuted if inline
               const embedUrl = isPlaying 
-                ? getCleanYouTubeEmbedUrl(project.youtubeUrl, 1, isInlinePlaying ? 0 : 1)
-                : getCleanYouTubeEmbedUrl(project.youtubeUrl, 0, 1);
+                ? getCleanYouTubeEmbedUrl(project.youtubeUrl, 1, 1, 0)
+                : getCleanYouTubeEmbedUrl(project.youtubeUrl, 0, 1, 1);
 
               const customThumb = project.thumbnail;
-              const fallbackYtHdThumb = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : HERO_BANNER;
+              const fallbackYtHdThumb = ytId 
+                ? (ytId === 'yv6bvPoPEzw' ? `https://i.ytimg.com/vi/${ytId}/hq720_2.jpg` : `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`)
+                : HERO_BANNER;
               const displayThumb = (customThumb && customThumb.trim().length > 0 && !customThumb.includes('placeholder')) 
                 ? customThumb 
                 : fallbackYtHdThumb;
@@ -198,97 +211,69 @@ function MainPortfolioContent() {
                   key={project.id || index}
                   className="group relative flex flex-col w-full"
                   onMouseEnter={() => setHoveredVideoId(project.id)}
-                  onMouseLeave={() => setHoveredVideoId(null)}
+                  onMouseLeave={() => {
+                    if (hoveredVideoId === project.id) {
+                      setHoveredVideoId(null);
+                    }
+                  }}
                 >
-                  {/* AMBIENT GLOW BACKDROP AURA EFFECT NEXT TO / BEHIND VIDEO */}
-                  <div className="absolute -inset-1 bg-gradient-to-tr from-yellow-500/25 via-amber-500/30 to-yellow-300/25 rounded-2xl blur-md opacity-60 group-hover:opacity-100 group-hover:blur-lg transition-all duration-500 pointer-events-none" />
+                  {/* AMBIENT GLOW BACKDROP AURA EFFECT */}
+                  <div className="absolute -inset-1 bg-gradient-to-tr from-cyan-500/20 via-amber-500/25 to-purple-500/20 rounded-2xl blur-md opacity-30 group-hover:opacity-100 group-hover:blur-lg transition-all duration-300 pointer-events-none" />
 
                   {/* MAIN CARD CONTAINER */}
-                  <div className="relative flex flex-col rounded-xl overflow-hidden bg-slate-950 border border-slate-800/90 group-hover:border-yellow-500/70 transition-all duration-300 shadow-xl w-full">
+                  <div className="relative flex flex-col rounded-xl overflow-hidden bg-slate-950 border border-slate-800/90 group-hover:border-cyan-400/80 transition-all duration-300 shadow-xl w-full">
                     
-                    {/* 100% CLEAN 9:16 VIDEO CANVAS WITH HOVER OR TAP-TO-PLAY */}
-                    <div className="relative w-full aspect-[9/16] bg-black overflow-hidden">
+                    {/* 100% CLEAN 9:16 VIDEO CANVAS (AUTO-PLAYS ON HOVER, ZERO OVERLAY TEXT, NO HOVER TOOLTIP) */}
+                    <div 
+                      className="relative w-full aspect-[9/16] bg-black overflow-hidden cursor-pointer"
+                      onClick={() => setActivePlayingVideo({ name: project.name || `Short #${index + 1}`, url: fullUrl })}
+                    >
                       {isPlaying ? (
                         <iframe
                           title={project.name || `YouTube Short ${index + 1}`}
                           src={embedUrl}
-                          className="w-full h-full border-0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          className="w-full h-full border-0 pointer-events-none"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                           allowFullScreen
                         />
                       ) : (
-                        /* CLEAN UNTOUCHED THUMBNAIL PREVIEW (100% PURE VIDEO WITH NO OVERLAID ICONS OR BADGES) */
-                        <div 
-                          className="relative w-full h-full cursor-pointer bg-slate-900 overflow-hidden"
-                          onClick={() => setPlayingInlineId(project.id)}
-                          title={`Click or tap to play ${project.name || 'video'} in HD`}
-                        >
-                          <img
-                            src={displayThumb}
-                            alt={project.name || `Video ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            onError={(e) => {
-                              const img = e.currentTarget as HTMLImageElement;
-                              if (ytId && img.src.includes('maxresdefault.jpg')) {
-                                img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
-                              } else if (ytId && img.src.includes('sddefault.jpg')) {
-                                img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
-                              }
-                            }}
-                          />
-                        </div>
+                        <img
+                          src={displayThumb}
+                          alt={project.name || `Video ${index + 1}`}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          onError={(e) => {
+                            const img = e.currentTarget as HTMLImageElement;
+                            if (ytId && img.src.includes('maxresdefault.jpg')) {
+                              img.src = `https://i.ytimg.com/vi/${ytId}/hq720_2.jpg`;
+                            } else if (ytId && img.src.includes('hq720_2.jpg')) {
+                              img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
+                            } else if (ytId && img.src.includes('sddefault.jpg')) {
+                              img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+                            }
+                          }}
+                        />
                       )}
                     </div>
 
-                    {/* CAPTION & CLEAN CONTROL BAR UNDERNEATH THE VIDEO (OUTSIDE THE VIDEO CANVAS) */}
-                    <div className="p-2 sm:p-2.5 bg-slate-950 border-t border-slate-900 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono">
-                        <span className="truncate font-bold text-slate-200">
-                          {project.name || `Short #${index + 1}`}
-                        </span>
-                        <span className="text-[9px] sm:text-[10px] text-yellow-400/80 shrink-0 ml-1 font-semibold">9:16</span>
-                      </div>
+                    {/* CLEAN BOTTOM BAR: TITLE ON LEFT, SLEEK CYAN FULLSCREEN BUTTON IN RIGHT CORNER */}
+                    <div className="p-2 sm:p-2.5 bg-slate-950 border-t border-slate-900/90 flex items-center justify-between gap-2">
+                      <span className="truncate font-mono font-bold text-slate-200 text-[11px] sm:text-xs">
+                        {project.name || `Short #${index + 1}`}
+                      </span>
 
-                      {/* CLEAN TEXT CONTROLS BELOW VIDEO */}
-                      <div className="flex items-center justify-between gap-1 pt-1 border-t border-slate-900/80 text-[9px] sm:text-[10px] font-mono font-bold">
-                        {isInlinePlaying ? (
-                          <button
-                            type="button"
-                            onClick={() => setPlayingInlineId(null)}
-                            className="text-amber-400 hover:text-amber-300 transition"
-                          >
-                            [STOP]
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setPlayingInlineId(project.id)}
-                            className="text-yellow-400 hover:text-yellow-300 transition"
-                          >
-                            [PLAY]
-                          </button>
-                        )}
-
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => setActivePlayingVideo({ name: project.name || `Short #${index + 1}`, url: fullUrl })}
-                            className="text-slate-400 hover:text-slate-200 transition"
-                          >
-                            [EXPAND]
-                          </button>
-                          <a
-                            href={fullUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-slate-400 hover:text-slate-200 transition"
-                          >
-                            [YT]
-                          </a>
-                        </div>
-                      </div>
+                      {/* SLEEK CYAN FULLSCREEN BUTTON IN THE CORNER */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActivePlayingVideo({ name: project.name || `Short #${index + 1}`, url: fullUrl });
+                        }}
+                        className="shrink-0 flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-cyan-950/70 hover:bg-cyan-900 text-cyan-300 hover:text-white border border-cyan-500/50 hover:border-cyan-400 font-mono text-[10px] sm:text-[11px] font-bold transition-all shadow-sm hover:shadow-[0_0_12px_rgba(34,211,238,0.4)] cursor-pointer active:scale-95"
+                      >
+                        <Maximize2 size={11} className="text-cyan-400" />
+                        <span>FULLSCREEN</span>
+                      </button>
                     </div>
-
                   </div>
                 </div>
               );
@@ -331,51 +316,128 @@ function MainPortfolioContent() {
         </div>
       </footer>
 
-      {/* CLEAN YOUTUBE VIDEO MODAL PLAYER (NO LOGO CLUTTER) */}
+      {/* FULL-SCREEN VIDEO MODAL PLAYER (SUPPORTS BOTH 9:16 SHORTS & 16:9 VIDEOS) */}
       <AnimatePresence>
-        {activePlayingVideo && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+        {activePlayingVideo && (() => {
+          const isShort = activePlayingVideo.url.includes('/shorts/') || 
+            activePlayingVideo.url.includes('1FXnOfA_uuM') || 
+            activePlayingVideo.url.includes('GjE7dtwXYmI') || 
+            activePlayingVideo.url.includes('yv6bvPoPEzw') || 
+            activePlayingVideo.url.includes('W9oWg03TyVs');
+
+          const toggleBrowserFullScreen = () => {
+            if (!document.fullscreenElement) {
+              if (modalPlayerRef.current?.requestFullscreen) {
+                modalPlayerRef.current.requestFullscreen().catch(() => {
+                  document.documentElement.requestFullscreen?.().catch(() => {});
+                });
+              } else {
+                document.documentElement.requestFullscreen?.().catch(() => {});
+              }
+            } else {
+              document.exitFullscreen?.().catch(() => {});
+            }
+          };
+
+          return (
+            <div 
+              className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/95 backdrop-blur-2xl"
+              onClick={() => setActivePlayingVideo(null)}
             >
-              {/* Modal Header Bar */}
-              <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900 border-b border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse" />
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider truncate max-w-xs sm:max-w-md">
-                    {activePlayingVideo.name}
-                  </span>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 10 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+                className={`relative w-full ${isShort ? 'max-w-[480px] sm:max-w-[520px]' : 'max-w-5xl'} bg-slate-950 border border-cyan-500/50 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col`}
+              >
+                {/* Modal Header Bar */}
+                <div className="flex items-center justify-between px-3.5 py-2.5 bg-slate-900 border-b border-slate-800">
+                  <div className="flex items-center gap-2 truncate pr-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+                    <span className="text-xs sm:text-sm font-mono font-bold text-white uppercase tracking-wider truncate">
+                      {activePlayingVideo.name}
+                    </span>
+                    {isShort && (
+                      <span className="px-1.5 py-0.5 rounded bg-cyan-400/20 text-cyan-300 text-[10px] font-mono shrink-0 font-bold">
+                        9:16 REEL
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={toggleBrowserFullScreen}
+                      className="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/50 font-mono text-xs transition flex items-center gap-1.5 cursor-pointer shadow"
+                      title="Toggle Fullscreen"
+                    >
+                      <Maximize2 size={13} />
+                      <span className="text-[11px] font-bold">FULLSCREEN</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActivePlayingVideo(null)}
+                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-950 hover:text-red-300 text-slate-300 border border-slate-700 font-mono text-xs transition flex items-center gap-1 cursor-pointer"
+                      title="Close"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActivePlayingVideo(null)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-mono text-xs transition"
+
+                {/* Video Player Frame with Fullscreen Container Ref */}
+                <div 
+                  ref={modalPlayerRef}
+                  className={`relative w-full ${isShort ? 'aspect-[9/16] max-h-[85vh]' : 'aspect-video'} bg-black overflow-hidden flex items-center justify-center`}
                 >
-                  ✕ Close Video
-                </button>
-              </div>
+                  <iframe
+                    title={activePlayingVideo.name}
+                    src={getCleanYouTubeEmbedUrl(activePlayingVideo.url, 1, 0, 1)}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                    allowFullScreen
+                    onLoad={(e) => {
+                      try {
+                        const cw = e.currentTarget.contentWindow;
+                        if (cw) {
+                          cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd1080'] }), '*');
+                          cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
+                        }
+                      } catch {}
+                    }}
+                  />
+                </div>
 
-              {/* Video Player Frame */}
-              <div className="relative w-full aspect-video bg-black">
-                <iframe
-                  title={activePlayingVideo.name}
-                  src={getCleanYouTubeEmbedUrl(activePlayingVideo.url)}
-                  className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-
-              <div className="px-5 py-2.5 bg-slate-950 border-t border-slate-900 text-[11px] font-mono text-slate-500 flex items-center justify-between">
-                <span>Clean Embed Player (No YouTube Branding Overlay)</span>
-                <span className="text-yellow-400 font-bold">1080p HD Ready</span>
-              </div>
-            </motion.div>
-          </div>
-        )}
+                {/* Footer Controls */}
+                <div className="px-4 py-2.5 bg-slate-950 border-t border-slate-900 text-[11px] font-mono text-slate-400 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                    1080p FHD • Crystal Clear
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={activePlayingVideo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition font-bold hover:underline"
+                    >
+                      <span>YouTube Native (Max Bitrate)</span>
+                      <ExternalLink size={12} />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => setActivePlayingVideo(null)}
+                      className="text-slate-400 hover:text-white transition cursor-pointer"
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          );
+        })()}
       </AnimatePresence>
 
     </div>

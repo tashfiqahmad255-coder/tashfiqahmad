@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ChevronRight, ChevronLeft, Sparkles, Play, Edit3 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Sparkles, Play, Pause, ExternalLink, RotateCcw } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 
 export default function FeaturedShowreel() {
-  const { siteData, openEditorTo } = useSiteData();
+  const { siteData } = useSiteData();
   const showreel = siteData.showreel;
   const [isMobile, setIsMobile] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isCardHovered, setIsCardHovered] = useState(false);
 
   useEffect(() => {
@@ -21,36 +22,35 @@ export default function FeaturedShowreel() {
   const bgStyle = showreel.bgStyle || 'matte-black';
   const showGlow = showreel.showGlow ?? false;
 
-  // Format YouTube URL into proper embed URL with high quality parameters, modestbranding, and hover play
-  const getEmbedUrl = (rawUrl: string, autoPlayOnHover = false) => {
-    const autoplayParam = autoPlayOnHover ? '1' : '0';
-    const muteParam = autoPlayOnHover ? '1' : '0';
-    if (!rawUrl) return `https://www.youtube-nocookie.com/embed/fFwFhNc523M?autoplay=${autoplayParam}&mute=${muteParam}&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
-    
-    // Extract ID from shorts link, standard link or embed link
-    let videoId = '';
+  // Extract YouTube ID cleanly
+  const extractVideoId = (rawUrl?: string): string => {
+    if (!rawUrl) return '1FXnOfA_uuM';
+    if (rawUrl.includes('shorts/')) {
+      return rawUrl.split('shorts/')[1]?.split('?')[0]?.split('&')[0] || '1FXnOfA_uuM';
+    }
+    if (rawUrl.includes('v=')) {
+      return rawUrl.split('v=')[1]?.split('&')[0] || '1FXnOfA_uuM';
+    }
+    if (rawUrl.includes('youtu.be/')) {
+      return rawUrl.split('youtu.be/')[1]?.split('?')[0] || '1FXnOfA_uuM';
+    }
     if (rawUrl.includes('youtube.com/embed/')) {
-      const parts = rawUrl.split('youtube.com/embed/');
-      videoId = parts[1]?.split('?')[0]?.split('&')[0] || '';
-    } else if (rawUrl.includes('shorts/')) {
-      const parts = rawUrl.split('shorts/');
-      videoId = parts[1]?.split('?')[0]?.split('&')[0] || '';
-    } else if (rawUrl.includes('v=')) {
-      const parts = rawUrl.split('v=');
-      videoId = parts[1]?.split('&')[0] || '';
-    } else if (rawUrl.includes('youtu.be/')) {
-      const parts = rawUrl.split('youtu.be/');
-      videoId = parts[1]?.split('?')[0] || '';
+      return rawUrl.split('youtube.com/embed/')[1]?.split('?')[0]?.split('&')[0] || '1FXnOfA_uuM';
     }
-
-    if (videoId) {
-      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=${autoplayParam}&mute=${muteParam}&rel=0&modestbranding=1&playsinline=1&controls=1&iv_load_policy=3&color=white&vq=hd1080&hd=1`;
-    }
-
-    return rawUrl;
+    return '1FXnOfA_uuM';
   };
 
-  const embedUrl = getEmbedUrl(showreel.youtubeUrl, isCardHovered);
+  const videoId = extractVideoId(showreel.youtubeUrl);
+
+  // Clean Full HD embed URL with playsinline and enablejsapi for highest quality playback
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&rel=0&playsinline=1&controls=1&iv_load_policy=3&vq=hd1080&hd=1&enablejsapi=1&fs=1`;
+
+  // Master Full HD / 8K thumbnail with dedicated high-res cover from user's enhanced image
+  const initialThumb = videoId === '1FXnOfA_uuM'
+    ? '/featured_showreel_thumb_8k.jpg?v=2'
+    : `https://i.ytimg.com/vi/${videoId}/hq720_3.jpg`;
+
+  const fullUrl = showreel.youtubeUrl || `https://youtube.com/shorts/${videoId}`;
 
   const containerBgClass = bgStyle === 'matte-black'
     ? 'bg-black border-zinc-800/90 shadow-[0_20px_50px_rgba(0,0,0,1)]'
@@ -88,7 +88,7 @@ export default function FeaturedShowreel() {
       )}
 
       {/* SECTION CONTENT */}
-      <div className="relative z-10 flex flex-col items-center text-center space-y-8 md:space-y-10">
+      <div className="relative z-10 flex flex-col items-center text-center space-y-6 sm:space-y-8 md:space-y-10">
         
         {/* SECTION HEADING */}
         <div className="space-y-3 max-w-2xl mx-auto">
@@ -167,16 +167,71 @@ export default function FeaturedShowreel() {
               onMouseLeave={() => setIsCardHovered(false)}
               className="relative z-10 w-full h-full rounded-[24px] overflow-hidden bg-slate-950 border border-cyan-500/40 p-1 shadow-[0_20px_50px_rgba(0,0,0,0.9)] shadow-cyan-500/20 group transition-all duration-300 hover:border-cyan-300/80 hover:shadow-[0_25px_60px_rgba(34,211,238,0.4)] transform-gpu"
             >
-              {/* INNER CONTAINER WITH EMBEDDED PLAYER */}
-              <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-black">
-                <iframe
-                  id="showreel-youtube-iframe"
-                  title="Featured Showreel"
-                  src={embedUrl}
-                  className="w-full h-full border-0 rounded-[20px]"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
+              {/* INNER CONTAINER WITH CRYSTAL-CLEAR 8K THUMBNAIL OR EMBEDDED PLAYER */}
+              <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-black flex items-center justify-center">
+                {isPlaying ? (
+                  <>
+                    <iframe
+                      id="showreel-youtube-iframe"
+                      title="Featured Showreel"
+                      src={embedUrl}
+                      className="w-full h-full border-0 rounded-[20px]"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                      allowFullScreen
+                      onLoad={(e) => {
+                        try {
+                          const cw = e.currentTarget.contentWindow;
+                          if (cw) {
+                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd2160'] }), '*');
+                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
+                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQualityRange', args: ['hd1080', 'highres'] }), '*');
+                          }
+                        } catch {}
+                      }}
+                    />
+                    {/* FLOATING TOP-RIGHT BUTTON TO SWITCH BACK TO 8K COVER */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsPlaying(false);
+                      }}
+                      className="absolute top-2.5 right-2.5 z-30 px-2.5 py-1 rounded-full bg-black/80 hover:bg-black/95 text-[10px] font-mono font-bold text-cyan-300 hover:text-white border border-cyan-500/40 shadow-lg backdrop-blur-md transition flex items-center gap-1"
+                      title="Return to 8K Cover"
+                    >
+                      <RotateCcw size={10} />
+                      <span>8K COVER</span>
+                    </button>
+                  </>
+                ) : (
+                  /* 100% CLEAN UNTOUCHED THUMBNAIL PREVIEW (JUST LIKE FAVORITE VIDEO PROJECTS, NO ICONS OR ROUND SYMBOLS) */
+                  <div
+                    onClick={() => setIsPlaying(true)}
+                    className="relative w-full h-full cursor-pointer overflow-hidden group/cover"
+                  >
+                    <img
+                      src={initialThumb}
+                      alt="My Creative Journey"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover/cover:scale-105"
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        if (img.src.includes('featured_showreel_thumb_8k.jpg')) {
+                          img.src = 'https://i.postimg.cc/dVNPzRfS/Screenshot-2026-09-04-120915.png';
+                        } else if (img.src.includes('Screenshot-2026-09-04-120915.png')) {
+                          img.src = `https://i.ytimg.com/vi/${videoId}/hq720_3.jpg`;
+                        } else if (img.src.includes('hq720_3.jpg')) {
+                          img.src = `https://i.ytimg.com/vi/${videoId}/maxres3.jpg`;
+                        } else if (img.src.includes('maxres3.jpg')) {
+                          img.src = `https://i.ytimg.com/vi/${videoId}/sd3.jpg`;
+                        } else if (img.src.includes('sd3.jpg')) {
+                          img.src = `https://i.ytimg.com/vi/${videoId}/hq3.jpg`;
+                        } else if (img.src.includes('hq3.jpg')) {
+                          img.src = `https://img.youtube.com/vi/${videoId}/3.jpg`;
+                        }
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </motion.div>
 
@@ -205,6 +260,37 @@ export default function FeaturedShowreel() {
             ))}
           </div>
 
+        </div>
+
+        {/* BOTTOM STATUS & CONTROL BAR FOR 8K PLAYBACK */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 pt-1">
+          <button
+            type="button"
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 hover:border-cyan-300 text-cyan-300 font-mono text-xs font-bold transition shadow-lg shadow-cyan-950/40"
+          >
+            {isPlaying ? (
+              <>
+                <RotateCcw size={13} className="text-cyan-400" />
+                <span>Show Cover</span>
+              </>
+            ) : (
+              <>
+                <Play size={13} className="fill-cyan-400 text-cyan-400" />
+                <span>Play Video</span>
+              </>
+            )}
+          </button>
+
+          <a
+            href={fullUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-500 text-slate-300 hover:text-white font-mono text-xs font-semibold transition"
+          >
+            <span>Open in YouTube</span>
+            <ExternalLink size={12} className="text-slate-400" />
+          </a>
         </div>
 
       </div>

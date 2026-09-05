@@ -189,14 +189,24 @@ export default function CustomMouseEffects() {
       setIsMouseDown(false);
     };
 
+    const handleMouseLeave = (e: MouseEvent) => {
+      // Only reset if mouse genuinely leaves the browser window
+      if (!e.relatedTarget && (e.clientY <= 0 || e.clientX <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight)) {
+        setIsHoveringInteractive(false);
+        setIsMouseDown(false);
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [isMobile, isHoveringInteractive, playHoverSound, playClickSound, playMoveZoomSound]);
 
@@ -226,21 +236,14 @@ export default function CustomMouseEffects() {
       />
 
       {/* DYNAMIC COMPACT CYAN & PURPLE CURSOR RING WITH GLOW & HOVER ZOOM */}
-      <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-50 rounded-full border border-cyan-400/80 shadow-[0_0_12px_rgba(34,211,238,0.5)] bg-purple-500/10 backdrop-blur-[1px]"
-        animate={{
-          x: mousePos.x - (isHoveringInteractive ? 20 : isMouseDown ? 12 : 15),
-          y: mousePos.y - (isHoveringInteractive ? 20 : isMouseDown ? 12 : 15),
-          width: isHoveringInteractive ? 40 : isMouseDown ? 24 : 30,
-          height: isHoveringInteractive ? 40 : isMouseDown ? 24 : 30,
-          scale: isMouseDown ? 0.85 : isHoveringInteractive ? 1.2 : 1,
+      <div
+        className="pointer-events-none fixed top-0 left-0 z-50 rounded-full border border-cyan-400/80 shadow-[0_0_12px_rgba(34,211,238,0.5)] bg-purple-500/10 backdrop-blur-[1px] transition-all duration-150 ease-out"
+        style={{
+          width: isHoveringInteractive ? '38px' : isMouseDown ? '24px' : '30px',
+          height: isHoveringInteractive ? '38px' : isMouseDown ? '24px' : '30px',
+          transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0) translate(-50%, -50%) scale(${isMouseDown ? 0.85 : 1})`,
           borderColor: isHoveringInteractive ? 'rgba(34, 211, 238, 0.95)' : 'rgba(168, 85, 247, 0.75)',
-        }}
-        transition={{
-          type: 'spring',
-          damping: 28,
-          stiffness: 350,
-          mass: 0.3,
+          opacity: mousePos.x < 0 ? 0 : 1,
         }}
       />
 
@@ -248,7 +251,8 @@ export default function CustomMouseEffects() {
       <div
         className="pointer-events-none fixed top-0 left-0 z-50 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]"
         style={{
-          transform: `translate3d(${mousePos.x - 4}px, ${mousePos.y - 4}px, 0)`,
+          transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0) translate(-50%, -50%)`,
+          opacity: mousePos.x < 0 ? 0 : 1,
         }}
       />
 

@@ -83,11 +83,11 @@ export default function FavoriteYouTubeProjects() {
           {videosToDisplay.map((video, idx) => {
             const ytId = extractYouTubeId(video.youtubeUrl);
             const modalEmbedUrl = ytId
-              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1`
-              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1';
+              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&playsinline=1&vq=hd1080&hd=1&enablejsapi=1&fs=1`
+              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&rel=0&playsinline=1&vq=hd1080&hd=1&enablejsapi=1&fs=1';
             const hoverEmbedUrl = ytId
-              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1&vq=hd1080&hd=1`
-              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1&vq=hd1080&hd=1';
+              ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&vq=hd1080&hd=1&enablejsapi=1&fs=1`
+              : 'https://www.youtube-nocookie.com/embed/Lo9j44fRxek?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&vq=hd1080&hd=1&enablejsapi=1&fs=1';
             const fullUrl = video.youtubeUrl || `https://youtu.be/${ytId}`;
             const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '';
             const isHovered = hoveredVideoId === video.id;
@@ -108,8 +108,17 @@ export default function FavoriteYouTubeProjects() {
                       title={video.name}
                       src={hoverEmbedUrl}
                       className="w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                       allowFullScreen
+                      onLoad={(e) => {
+                        try {
+                          const cw = e.currentTarget.contentWindow;
+                          if (cw) {
+                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd2160'] }), '*');
+                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
+                          }
+                        } catch {}
+                      }}
                     />
                   ) : (
                     <>
@@ -226,9 +235,27 @@ export default function FavoriteYouTubeProjects() {
                   src={activeVideoModal.embedUrl}
                   title={activeVideoModal.title}
                   className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                   allowFullScreen
+                  onLoad={(e) => {
+                    try {
+                      const cw = e.currentTarget.contentWindow;
+                      if (cw) {
+                        cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd1080'] }), '*');
+                        cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
+                      }
+                    } catch {}
+                  }}
                 />
+              </div>
+
+              {/* FOOTER STATUS */}
+              <div className="px-4 py-2 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono">
+                <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  1080p FHD Active
+                </span>
+                <span className="text-slate-400">Press Esc or click outside to close</span>
               </div>
             </motion.div>
           </motion.div>
