@@ -80,3 +80,18 @@
   }
 }
 
+/* Fullscreen video styling to prevent pixelation and ensure true 100vw x 100vh display */
+:fullscreen,
+:-webkit-full-screen {
+  background-color: #000000 !important;
+}
+
+:fullscreen iframe,
+:-webkit-full-screen iframe {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border: 0 !important;
+}
+

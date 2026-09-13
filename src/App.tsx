@@ -21,6 +21,7 @@ import {
   CONTACT_INFO, SOFTWARES, 
   VIDEO_CATEGORIES, DESIGN_CATEGORIES, TESTIMONIALS 
 } from './data';
+import { disableSubtitlesAndForceHd, buildCleanYouTubeEmbedUrl } from './utils/youtubePlayer';
 
 const HERO_BANNER = '/src/assets/images/portfolio_hero_banner_1784532214740.jpg';
 const DESIGN_ARTWORK = '/src/assets/images/bangladesh_art_showcase_1784532243275.jpg';
@@ -43,13 +44,17 @@ function extractYouTubeId(url?: string): string | null {
   return null;
 }
 
+function forceIframeHdQuality(iframeEl: HTMLIFrameElement | null) {
+  disableSubtitlesAndForceHd(iframeEl);
+}
+
 function getCleanVideoThumbnail(youtubeUrl?: string, customThumbUrl?: string): string {
   if (customThumbUrl && customThumbUrl.trim().length > 0 && !customThumbUrl.includes('placeholder')) {
     return customThumbUrl;
   }
   const ytId = extractYouTubeId(youtubeUrl);
   if (ytId) {
-    return `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+    return `https://i.ytimg.com/vi/${ytId}/oar2.jpg`;
   }
   return HERO_BANNER;
 }
@@ -57,8 +62,7 @@ function getCleanVideoThumbnail(youtubeUrl?: string, customThumbUrl?: string): s
 function getCleanYouTubeEmbedUrl(youtubeUrl?: string, autoplay = 1, mute = 0, controls = 1): string {
   const ytId = extractYouTubeId(youtubeUrl);
   const id = ytId || '1FXnOfA_uuM';
-  // Reliable Full HD 1080p stream parameters with enablejsapi and playsinline
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay}&mute=${mute}&controls=${controls}&playsinline=1&loop=1&playlist=${id}&rel=0&iv_load_policy=3&vq=hd1080&hd=1&enablejsapi=1&fs=1`;
+  return buildCleanYouTubeEmbedUrl(id, { autoplay, mute, controls, loop: 1 });
 }
 
 function MainPortfolioContent() {
@@ -200,7 +204,7 @@ function MainPortfolioContent() {
 
               const customThumb = project.thumbnail;
               const fallbackYtHdThumb = ytId 
-                ? (ytId === 'yv6bvPoPEzw' ? `https://i.ytimg.com/vi/${ytId}/hq720_2.jpg` : `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`)
+                ? `https://i.ytimg.com/vi/${ytId}/oar2.jpg`
                 : HERO_BANNER;
               const displayThumb = (customThumb && customThumb.trim().length > 0 && !customThumb.includes('placeholder')) 
                 ? customThumb 
@@ -235,15 +239,21 @@ function MainPortfolioContent() {
                           className="w-full h-full border-0 pointer-events-none"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                           allowFullScreen
+                          onLoad={(e) => forceIframeHdQuality(e.currentTarget)}
                         />
                       ) : (
                         <img
                           src={displayThumb}
                           alt={project.name || `Video ${index + 1}`}
+                          referrerPolicy="no-referrer"
+                          loading="eager"
+                          decoding="async"
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {
                             const img = e.currentTarget as HTMLImageElement;
-                            if (ytId && img.src.includes('maxresdefault.jpg')) {
+                            if (ytId && img.src.includes('oar2.jpg')) {
+                              img.src = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+                            } else if (ytId && img.src.includes('maxresdefault.jpg')) {
                               img.src = `https://i.ytimg.com/vi/${ytId}/hq720_2.jpg`;
                             } else if (ytId && img.src.includes('hq720_2.jpg')) {
                               img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
@@ -322,12 +332,21 @@ function MainPortfolioContent() {
           const isShort = activePlayingVideo.url.includes('/shorts/') || 
             activePlayingVideo.url.includes('1FXnOfA_uuM') || 
             activePlayingVideo.url.includes('GjE7dtwXYmI') || 
+            activePlayingVideo.url.includes('7Qik9AO8ICg') ||
+            activePlayingVideo.url.includes('zeXHM4StNL8') ||
             activePlayingVideo.url.includes('yv6bvPoPEzw') || 
             activePlayingVideo.url.includes('W9oWg03TyVs');
 
           const toggleBrowserFullScreen = () => {
+            const iframe = modalPlayerRef.current?.querySelector('iframe');
             if (!document.fullscreenElement) {
-              if (modalPlayerRef.current?.requestFullscreen) {
+              if (iframe?.requestFullscreen) {
+                iframe.requestFullscreen().catch(() => {
+                  modalPlayerRef.current?.requestFullscreen?.().catch(() => {
+                    document.documentElement.requestFullscreen?.().catch(() => {});
+                  });
+                });
+              } else if (modalPlayerRef.current?.requestFullscreen) {
                 modalPlayerRef.current.requestFullscreen().catch(() => {
                   document.documentElement.requestFullscreen?.().catch(() => {});
                 });
@@ -350,7 +369,7 @@ function MainPortfolioContent() {
                 exit={{ opacity: 0, scale: 0.94, y: 10 }}
                 transition={{ duration: 0.2 }}
                 onClick={(e) => e.stopPropagation()}
-                className={`relative w-full ${isShort ? 'max-w-[480px] sm:max-w-[520px]' : 'max-w-5xl'} bg-slate-950 border border-cyan-500/50 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col`}
+                className={`relative w-full ${isShort ? 'max-w-[480px] sm:max-w-[520px]' : 'max-w-6xl'} bg-slate-950 border border-cyan-500/50 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col`}
               >
                 {/* Modal Header Bar */}
                 <div className="flex items-center justify-between px-3.5 py-2.5 bg-slate-900 border-b border-slate-800">
@@ -397,24 +416,20 @@ function MainPortfolioContent() {
                     className="w-full h-full border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                     allowFullScreen
-                    onLoad={(e) => {
-                      try {
-                        const cw = e.currentTarget.contentWindow;
-                        if (cw) {
-                          cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd1080'] }), '*');
-                          cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
-                        }
-                      } catch {}
-                    }}
+                    onLoad={(e) => forceIframeHdQuality(e.currentTarget)}
                   />
                 </div>
 
                 {/* Footer Controls */}
                 <div className="px-4 py-2.5 bg-slate-950 border-t border-slate-900 text-[11px] font-mono text-slate-400 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                    1080p FHD • Crystal Clear
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                      1080p FHD • Crystal Clear
+                    </span>
+                    <span className="hidden md:inline-block text-slate-600">•</span>
+                    <span className="text-slate-400 hidden md:inline-block">Click player ⚙️ Gear for 1080p or toggle Fullscreen</span>
+                  </div>
                   <div className="flex items-center gap-3">
                     <a
                       href={activePlayingVideo.url}

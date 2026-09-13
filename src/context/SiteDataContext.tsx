@@ -109,17 +109,22 @@ const DEFAULT_SHOWREEL: ShowreelData = {
 const DEFAULT_AI_WORKFLOW_VIDEOS: AiWorkflowVideo[] = [
   {
     id: 'ai_vid_01',
-    name: 'Cinematic Result #1',
-    youtubeUrl: 'https://youtu.be/Lo9j44fRxek',
+    name: 'My Documentary Video',
+    youtubeUrl: 'https://youtu.be/b3OhqdFnc0w',
   },
   {
     id: 'ai_vid_02',
-    name: 'Cinematic Result #2',
-    youtubeUrl: 'https://youtu.be/au2xoh2zcyI',
+    name: 'As-Sunnah Skill Development Institute',
+    youtubeUrl: 'https://youtu.be/Lo9j44fRxek',
   },
   {
     id: 'ai_vid_03',
-    name: 'Cinematic Result #3',
+    name: 'Project - 10 Commercial Cut',
+    youtubeUrl: 'https://youtu.be/au2xoh2zcyI',
+  },
+  {
+    id: 'ai_vid_04',
+    name: 'Ai Ad Video Creative Edit',
     youtubeUrl: 'https://youtu.be/uZvCG05QIQQ',
   },
 ];
@@ -198,7 +203,7 @@ const DEFAULT_SITE_DATA: SiteDataState = {
   adminPasskey: '2026'
 };
 
-const LOCAL_STORAGE_KEY = 'tashfiq_portfolio_cms_v4';
+const LOCAL_STORAGE_KEY = 'tashfiq_portfolio_cms_v13';
 
 interface SiteDataContextType {
   siteData: SiteDataState;
@@ -262,14 +267,86 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           youtubeUrl: 'https://youtube.com/shorts/1FXnOfA_uuM?feature=share'
         };
 
-        const hasNewVideos = parsed.videoProjects && parsed.videoProjects.some((p: any) => p.youtubeUrl?.includes('GjE7dtwXYmI'));
-        const cleanVideoProjects = (parsed.videoProjects?.length === 9 && hasNewVideos)
+        const hasViralShorts = parsed.videoProjects && parsed.videoProjects.some((p: any) => p.youtubeUrl?.includes('7Qik9AO8ICg'));
+        let cleanVideoProjects = (parsed.videoProjects?.length === 9 && hasViralShorts)
           ? parsed.videoProjects
           : VIDEO_PROJECTS;
 
-        const cleanAiWorkflowVideos = (parsed.aiWorkflowVideos?.length === 3)
+        if (cleanVideoProjects && cleanVideoProjects.length === 9) {
+          cleanVideoProjects = cleanVideoProjects.map((proj: any, idx: number) => {
+            // Line 1, 2nd video: Viral Shorts (new video: 7Qik9AO8ICg)
+            if (idx === 1) {
+              return {
+                ...proj,
+                name: 'Viral Shorts',
+                youtubeUrl: 'https://youtube.com/shorts/7Qik9AO8ICg',
+                thumbnail: 'https://i.postimg.cc/RZMpXg0C/Screenshot-2026-09-13-183541.png',
+                category: 'YouTube Short / Reel'
+              };
+            }
+            // Line 1, 3rd video: Motion Graphics & Kinetic Reel
+            if (idx === 2) {
+              return {
+                ...proj,
+                name: 'Motion Graphics & Kinetic Reel',
+                youtubeUrl: 'https://youtube.com/shorts/W9oWg03TyVs',
+                thumbnail: 'https://i.postimg.cc/7ZxtmKLH/Screenshot-2026-09-13-183628.png',
+                category: 'YouTube Short / Reel'
+              };
+            }
+            // Line 2, 1st video: Dynamic Vertical Reel Edit (moved from Line 1, 2nd)
+            if (idx === 3) {
+              return {
+                ...proj,
+                name: 'Dynamic Vertical Reel Edit',
+                youtubeUrl: 'https://youtube.com/shorts/yv6bvPoPEzw',
+                thumbnail: 'https://i.ytimg.com/vi/yv6bvPoPEzw/oar2.jpg',
+                category: 'YouTube Short / Reel'
+              };
+            }
+            // Line 2, 2nd video: Assunnah Ad Final
+            if (idx === 4) {
+              return {
+                ...proj,
+                name: 'Assunnah Ad Final',
+                youtubeUrl: 'https://youtube.com/shorts/jtk6glAzAdA',
+                thumbnail: 'https://i.ytimg.com/vi/jtk6glAzAdA/oar2.jpg',
+                category: 'Commercial Ad / Vertical Short'
+              };
+            }
+            // Line 3, 1st video: Featured Vertical Short #3 (the extra 3rd video from Line 2)
+            if (idx === 6) {
+              return {
+                ...proj,
+                name: 'Featured Vertical Short #3',
+                youtubeUrl: 'https://youtube.com/shorts/KsCEsAUmtKA?feature=share',
+                thumbnail: 'https://i.ytimg.com/vi/KsCEsAUmtKA/oar2.jpg',
+                category: 'YouTube Short / Reel'
+              };
+            }
+            return proj;
+          });
+        }
+
+        const hasDocVideo = parsed.aiWorkflowVideos && parsed.aiWorkflowVideos.some((p: any) => p.youtubeUrl?.includes('b3OhqdFnc0w'));
+        const hasAllFour = parsed.aiWorkflowVideos?.length === 4 && hasDocVideo;
+        let cleanAiWorkflowVideos = hasAllFour
           ? parsed.aiWorkflowVideos
           : DEFAULT_AI_WORKFLOW_VIDEOS;
+
+        // Ensure exactly 4 items and 1st slot is My Documentary Video
+        if (cleanAiWorkflowVideos && cleanAiWorkflowVideos[0]) {
+          cleanAiWorkflowVideos = cleanAiWorkflowVideos.slice(0, 4).map((vid: any, idx: number) => {
+            if (idx === 0) {
+              return {
+                ...vid,
+                name: 'My Documentary Video',
+                youtubeUrl: 'https://youtu.be/b3OhqdFnc0w'
+              };
+            }
+            return vid;
+          });
+        }
 
         let cleanBehance = parsed.aboutContact?.behance;
         if (!cleanBehance || cleanBehance.includes('tashfiqtamim')) {

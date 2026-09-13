@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronRight, ChevronLeft, Sparkles, Play, Pause, ExternalLink, RotateCcw } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
+import { disableSubtitlesAndForceHd, buildCleanYouTubeEmbedUrl } from '../utils/youtubePlayer';
 
 export default function FeaturedShowreel() {
   const { siteData } = useSiteData();
@@ -42,8 +43,8 @@ export default function FeaturedShowreel() {
 
   const videoId = extractVideoId(showreel.youtubeUrl);
 
-  // Clean Full HD embed URL with playsinline and enablejsapi for highest quality playback
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&rel=0&playsinline=1&controls=1&iv_load_policy=3&vq=hd1080&hd=1&enablejsapi=1&fs=1`;
+  // Clean Full HD embed URL with playsinline and enablejsapi for highest quality playback with captions disabled
+  const embedUrl = buildCleanYouTubeEmbedUrl(videoId, { autoplay: 1, mute: 0, controls: 1 });
 
   // Master Full HD / 8K thumbnail with dedicated high-res cover from user's enhanced image
   const initialThumb = videoId === '1FXnOfA_uuM'
@@ -179,14 +180,7 @@ export default function FeaturedShowreel() {
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                       allowFullScreen
                       onLoad={(e) => {
-                        try {
-                          const cw = e.currentTarget.contentWindow;
-                          if (cw) {
-                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd2160'] }), '*');
-                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['highres'] }), '*');
-                            cw.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQualityRange', args: ['hd1080', 'highres'] }), '*');
-                          }
-                        } catch {}
+                        disableSubtitlesAndForceHd(e.currentTarget);
                       }}
                     />
                     {/* FLOATING TOP-RIGHT BUTTON TO SWITCH BACK TO 8K COVER */}

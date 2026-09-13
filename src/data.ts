@@ -96,19 +96,21 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
     youtubeUrl: 'https://youtube.com/shorts/GjE7dtwXYmI',
+    thumbnail: 'https://i.ytimg.com/vi/GjE7dtwXYmI/oar2.jpg',
     highlights: ['Before & After', 'Talking Head', 'Color Grading'],
     completionYear: 2026
   },
   {
-    id: 'vid_02_dynamiccomp',
-    name: 'Dynamic Vertical Reel Edit',
+    id: 'vid_02_viralshorts',
+    name: 'Viral Shorts',
     category: 'YouTube Short / Reel',
-    description: 'High-tempo vertical reel edit featuring fast cuts, motion graphics, and audio sync.',
+    description: 'High-energy viral short edit featuring fast cuts, motion graphics, and engaging audio pacing.',
     clientName: 'Featured Project',
     duration: '00:60 Min',
-    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects', 'CapCut'],
-    youtubeUrl: 'https://youtube.com/shorts/yv6bvPoPEzw',
-    highlights: ['Vertical Reel', 'Motion Graphics', 'Sound Design'],
+    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
+    youtubeUrl: 'https://youtube.com/shorts/7Qik9AO8ICg',
+    thumbnail: 'https://i.postimg.cc/RZMpXg0C/Screenshot-2026-09-13-183541.png',
+    highlights: ['Viral Reel', 'Motion Pacing', 'Sound Design'],
     completionYear: 2026
   },
   {
@@ -120,23 +122,38 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe After Effects', 'Adobe Premiere Pro'],
     youtubeUrl: 'https://youtube.com/shorts/W9oWg03TyVs',
+    thumbnail: 'https://i.postimg.cc/7ZxtmKLH/Screenshot-2026-09-13-183628.png',
     highlights: ['Motion Graphics', 'Kinetic Typography', 'Transitions'],
     completionYear: 2026
   },
   {
-    id: 'vid_01',
-    name: 'Featured Vertical Short #1',
+    id: 'vid_04_dynamiccomp',
+    name: 'Dynamic Vertical Reel Edit',
     category: 'YouTube Short / Reel',
-    description: 'Cinematic vertical short video with dynamic motion pacing and color grading.',
+    description: 'High-tempo vertical reel edit featuring fast cuts, motion graphics, and audio sync.',
     clientName: 'Featured Project',
     duration: '00:60 Min',
-    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
-    youtubeUrl: 'https://youtube.com/shorts/hUaubQKbius?feature=share',
-    highlights: ['Vertical Reel', 'Color Grading', 'Motion Editing'],
+    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects', 'CapCut'],
+    youtubeUrl: 'https://youtube.com/shorts/yv6bvPoPEzw',
+    thumbnail: 'https://i.ytimg.com/vi/yv6bvPoPEzw/oar2.jpg',
+    highlights: ['Vertical Reel', 'Motion Graphics', 'Sound Design'],
     completionYear: 2026
   },
   {
-    id: 'vid_02',
+    id: 'vid_05_assunnah',
+    name: 'Assunnah Ad Final',
+    category: 'Commercial Ad / Vertical Short',
+    description: 'High-impact commercial advertisement edit for Assunnah Foundation featuring cinematic pacing, sound design, and color grading.',
+    clientName: 'Assunnah Foundation',
+    duration: '00:60 Min',
+    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
+    youtubeUrl: 'https://youtube.com/shorts/jtk6glAzAdA',
+    thumbnail: 'https://i.ytimg.com/vi/jtk6glAzAdA/oar2.jpg',
+    highlights: ['Commercial Ad', 'Sound Design', 'Motion Pacing'],
+    completionYear: 2026
+  },
+  {
+    id: 'vid_06_featured',
     name: 'Featured Vertical Short #2',
     category: 'YouTube Short / Reel',
     description: 'High-energy vertical reel edit featuring fast cuts, motion graphics, and audio sync.',
@@ -144,11 +161,12 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
     youtubeUrl: 'https://youtube.com/shorts/NDb6XfrtvuQ?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/NDb6XfrtvuQ/oar2.jpg',
     highlights: ['Vertical Reel', 'High-speed Cuts', 'Sound Design'],
     completionYear: 2026
   },
   {
-    id: 'vid_03',
+    id: 'vid_07_featured',
     name: 'Featured Vertical Short #3',
     category: 'YouTube Short / Reel',
     description: 'Engaging vertical content edit with sleek visual typography and smooth cuts.',
@@ -156,11 +174,12 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe Premiere Pro', 'CapCut'],
     youtubeUrl: 'https://youtube.com/shorts/KsCEsAUmtKA?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/KsCEsAUmtKA/oar2.jpg',
     highlights: ['Vertical Reel', 'Kinetic Typography', 'Transitions'],
     completionYear: 2026
   },
   {
-    id: 'vid_04',
+    id: 'vid_08_featured',
     name: 'Featured Vertical Short #4',
     category: 'YouTube Short / Reel',
     description: 'Creative short format video with custom color matrix and visual rhythm.',
@@ -168,11 +187,12 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe Premiere Pro', 'DaVinci Resolve'],
     youtubeUrl: 'https://youtube.com/shorts/FlD4ETG3t6Y?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/FlD4ETG3t6Y/oar2.jpg',
     highlights: ['Vertical Reel', 'Color Matrix', 'Visual Rhythm'],
     completionYear: 2026
   },
   {
-    id: 'vid_05',
+    id: 'vid_09_featured',
     name: 'Featured Vertical Short #5',
     category: 'YouTube Short / Reel',
     description: 'Sleek commercial short edit crafted for high audience engagement.',
@@ -180,19 +200,8 @@ export const VIDEO_PROJECTS: VideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
     youtubeUrl: 'https://youtube.com/shorts/tkIf1SibtKc?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/tkIf1SibtKc/oar2.jpg',
     highlights: ['Vertical Reel', 'Commercial Edit', 'Audience Engagement'],
-    completionYear: 2026
-  },
-  {
-    id: 'vid_06',
-    name: 'Featured Vertical Short #6',
-    category: 'YouTube Short / Reel',
-    description: 'Dynamic motion short with precise beat-synced cuts and aesthetic visual effects.',
-    clientName: 'Featured Project',
-    duration: '00:60 Min',
-    softwareUsed: ['Adobe Premiere Pro', 'Adobe After Effects'],
-    youtubeUrl: 'https://youtube.com/shorts/EVjEsKVi51w?feature=share',
-    highlights: ['Vertical Reel', 'Beat Syncing', 'Visual FX'],
     completionYear: 2026
   }
 ];
