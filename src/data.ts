@@ -269,7 +269,7 @@ export const AI_VIDEO_PROJECTS: AiVideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['AI Generative Tools', 'Adobe Premiere Pro', 'Adobe After Effects'],
     youtubeUrl: 'https://youtube.com/shorts/ICWzjGkHSxs?feature=share',
-    thumbnail: 'https://i.ytimg.com/vi/ICWzjGkHSxs/oar2.jpg',
+    thumbnail: '/ai_project_1_thumb.jpg',
     highlights: ['AI Video Generation', 'Prompt Engineering', 'Cinematic Color'],
     completionYear: 2026
   },
@@ -282,7 +282,7 @@ export const AI_VIDEO_PROJECTS: AiVideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['AI Generative Tools', 'Adobe After Effects'],
     youtubeUrl: 'https://youtube.com/shorts/IS_xUdZRPm0?feature=share',
-    thumbnail: 'https://i.ytimg.com/vi/IS_xUdZRPm0/oar2.jpg',
+    thumbnail: '/ai_project_2_thumb.jpg',
     highlights: ['Neural Motion', 'Sound Design', 'Visual Rhythm'],
     completionYear: 2026
   },
@@ -295,7 +295,7 @@ export const AI_VIDEO_PROJECTS: AiVideoProject[] = [
     duration: '00:60 Min',
     softwareUsed: ['AI Generative Tools', 'Adobe Premiere Pro', 'CapCut'],
     youtubeUrl: 'https://youtube.com/shorts/lkBMqZS4d2w?feature=share',
-    thumbnail: 'https://i.ytimg.com/vi/lkBMqZS4d2w/oar2.jpg',
+    thumbnail: '/ai_project_3_thumb.jpg',
     highlights: ['AI Storytelling', 'Cinematic Flow', 'Audio Sync'],
     completionYear: 2026
   }

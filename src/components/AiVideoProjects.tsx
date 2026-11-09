@@ -119,10 +119,14 @@ export default function AiVideoProjects({ onOpenVideo }: AiVideoProjectsProps) {
             ? buildCleanYouTubeEmbedUrl(ytId, { autoplay: 1, mute: 1, controls: 0 })
             : '';
 
-          const fallbackYtHdThumb = ytId 
-            ? `https://i.ytimg.com/vi/${ytId}/oar2.jpg`
-            : '';
-          const displayThumb = project.thumbnail || fallbackYtHdThumb;
+          const localThumbMap: Record<string, string> = {
+            'ICWzjGkHSxs': '/ai_project_1_thumb.jpg',
+            'IS_xUdZRPm0': '/ai_project_2_thumb.jpg',
+            'lkBMqZS4d2w': '/ai_project_3_thumb.jpg'
+          };
+          const fallbackLocal = ytId ? localThumbMap[ytId] : '';
+          const fallbackYtMaxRes = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : '';
+          const displayThumb = project.thumbnail || fallbackLocal || fallbackYtMaxRes;
 
           return (
             <div
@@ -166,13 +170,11 @@ export default function AiVideoProjects({ onOpenVideo }: AiVideoProjectsProps) {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 [image-rendering:-webkit-optimize-contrast]"
                         onError={(e) => {
                           const img = e.currentTarget as HTMLImageElement;
-                          if (ytId && img.src.includes('oar2.jpg')) {
+                          if (fallbackLocal && img.src !== fallbackLocal && !img.src.endsWith(fallbackLocal)) {
+                            img.src = fallbackLocal;
+                          } else if (ytId && !img.src.includes('maxresdefault.jpg')) {
                             img.src = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
-                          } else if (ytId && img.src.includes('maxresdefault.jpg')) {
-                            img.src = `https://i.ytimg.com/vi/${ytId}/hq720_2.jpg`;
-                          } else if (ytId && img.src.includes('hq720_2.jpg')) {
-                            img.src = `https://img.youtube.com/vi/${ytId}/sddefault.jpg`;
-                          } else if (ytId && img.src.includes('sddefault.jpg')) {
+                          } else if (ytId && !img.src.includes('hqdefault.jpg')) {
                             img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
                           }
                         }}
