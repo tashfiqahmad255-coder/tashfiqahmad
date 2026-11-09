@@ -14,6 +14,7 @@ import WaterRippleCanvas from './components/WaterRippleCanvas';
 import HeroBanner3D from './components/HeroBanner3D';
 import FeaturedShowreel from './components/FeaturedShowreel';
 import FavoriteYouTubeProjects from './components/FavoriteYouTubeProjects';
+import AiVideoProjects from './components/AiVideoProjects';
 import Navbar from './components/Navbar';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { SiteDataProvider, useSiteData } from './context/SiteDataContext';
@@ -291,6 +292,9 @@ function MainPortfolioContent() {
           </div>
         </section>
 
+        {/* AI VIDEO PROJECTS (BETWEEN FAVORITE VIDEO PROJECTS & FAVORITE YOUTUBE PROJECTS) */}
+        <AiVideoProjects onOpenVideo={(v) => setActivePlayingVideo(v)} />
+
         {/* FAVORITE YOUTUBE VIDEO PROJECTS */}
         <FavoriteYouTubeProjects />
 
@@ -335,26 +339,25 @@ function MainPortfolioContent() {
             activePlayingVideo.url.includes('7Qik9AO8ICg') ||
             activePlayingVideo.url.includes('zeXHM4StNL8') ||
             activePlayingVideo.url.includes('yv6bvPoPEzw') || 
-            activePlayingVideo.url.includes('W9oWg03TyVs');
+            activePlayingVideo.url.includes('W9oWg03TyVs') ||
+            activePlayingVideo.url.includes('ICWzjGkHSxs') ||
+            activePlayingVideo.url.includes('IS_xUdZRPm0') ||
+            activePlayingVideo.url.includes('lkBMqZS4d2w');
 
           const toggleBrowserFullScreen = () => {
-            const iframe = modalPlayerRef.current?.querySelector('iframe');
+            const el = modalPlayerRef.current || document.documentElement;
             if (!document.fullscreenElement) {
-              if (iframe?.requestFullscreen) {
-                iframe.requestFullscreen().catch(() => {
-                  modalPlayerRef.current?.requestFullscreen?.().catch(() => {
-                    document.documentElement.requestFullscreen?.().catch(() => {});
-                  });
-                });
-              } else if (modalPlayerRef.current?.requestFullscreen) {
-                modalPlayerRef.current.requestFullscreen().catch(() => {
-                  document.documentElement.requestFullscreen?.().catch(() => {});
-                });
-              } else {
-                document.documentElement.requestFullscreen?.().catch(() => {});
+              if (el.requestFullscreen) {
+                el.requestFullscreen().catch(() => {});
+              } else if ((el as any).webkitRequestFullscreen) {
+                (el as any).webkitRequestFullscreen();
               }
             } else {
-              document.exitFullscreen?.().catch(() => {});
+              if (document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+              } else if ((document as any).webkitExitFullscreen) {
+                (document as any).webkitExitFullscreen();
+              }
             }
           };
 

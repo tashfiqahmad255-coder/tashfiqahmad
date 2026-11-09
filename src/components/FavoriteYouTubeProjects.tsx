@@ -76,23 +76,19 @@ export default function FavoriteYouTubeProjects() {
     : defaultVideos;
 
   const toggleBrowserFullScreen = () => {
-    const iframe = modalPlayerRef.current?.querySelector('iframe');
+    const el = modalPlayerRef.current || document.documentElement;
     if (!document.fullscreenElement) {
-      if (iframe?.requestFullscreen) {
-        iframe.requestFullscreen().catch(() => {
-          modalPlayerRef.current?.requestFullscreen?.().catch(() => {
-            document.documentElement.requestFullscreen?.().catch(() => {});
-          });
-        });
-      } else if (modalPlayerRef.current?.requestFullscreen) {
-        modalPlayerRef.current.requestFullscreen().catch(() => {
-          document.documentElement.requestFullscreen?.().catch(() => {});
-        });
-      } else {
-        document.documentElement.requestFullscreen?.().catch(() => {});
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {});
+      } else if ((el as any).webkitRequestFullscreen) {
+        (el as any).webkitRequestFullscreen();
       }
     } else {
-      document.exitFullscreen?.().catch(() => {});
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
     }
   };
 

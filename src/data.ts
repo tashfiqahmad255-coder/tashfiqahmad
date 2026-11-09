@@ -245,6 +245,62 @@ export const DESIGN_PROJECTS: DesignProject[] = [
   }
 ];
 
+export interface AiVideoProject {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  clientName?: string;
+  duration?: string;
+  softwareUsed?: string[];
+  thumbnail?: string;
+  youtubeUrl: string;
+  highlights?: string[];
+  completionYear?: number;
+}
+
+export const AI_VIDEO_PROJECTS: AiVideoProject[] = [
+  {
+    id: 'ai_vid_01',
+    name: 'AI Video Project #1',
+    category: 'AI Generated / Short',
+    description: 'Cutting-edge AI video synthesis, dynamic character animation, and high-impact visual aesthetics.',
+    clientName: 'Featured AI Project',
+    duration: '00:60 Min',
+    softwareUsed: ['AI Generative Tools', 'Adobe Premiere Pro', 'Adobe After Effects'],
+    youtubeUrl: 'https://youtube.com/shorts/ICWzjGkHSxs?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/ICWzjGkHSxs/oar2.jpg',
+    highlights: ['AI Video Generation', 'Prompt Engineering', 'Cinematic Color'],
+    completionYear: 2026
+  },
+  {
+    id: 'ai_vid_02',
+    name: 'AI Video Project #2',
+    category: 'AI Generated / Short',
+    description: 'High-tempo neural video motion, realistic motion synthesis, and engaging audio pacing.',
+    clientName: 'Featured AI Project',
+    duration: '00:60 Min',
+    softwareUsed: ['AI Generative Tools', 'Adobe After Effects'],
+    youtubeUrl: 'https://youtube.com/shorts/IS_xUdZRPm0?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/IS_xUdZRPm0/oar2.jpg',
+    highlights: ['Neural Motion', 'Sound Design', 'Visual Rhythm'],
+    completionYear: 2026
+  },
+  {
+    id: 'ai_vid_03',
+    name: 'AI Video Project #3',
+    category: 'AI Generated / Short',
+    description: 'Innovative AI creative storytelling edit featuring fluid camera transitions and artistic mood.',
+    clientName: 'Featured AI Project',
+    duration: '00:60 Min',
+    softwareUsed: ['AI Generative Tools', 'Adobe Premiere Pro', 'CapCut'],
+    youtubeUrl: 'https://youtube.com/shorts/lkBMqZS4d2w?feature=share',
+    thumbnail: 'https://i.ytimg.com/vi/lkBMqZS4d2w/oar2.jpg',
+    highlights: ['AI Storytelling', 'Cinematic Flow', 'Audio Sync'],
+    completionYear: 2026
+  }
+];
+
 export const TESTIMONIALS: Testimonial[] = [
   {
     clientName: 'Affan',
@@ -268,3 +324,4 @@ export const CONTACT_INFO = {
   instagram: 'https://www.instagram.com/tashfiq_tamim?igsh=ankwYXFmNTRteW83',
   telegram: 'https://web.telegram.org/k/#777000'
 };
+
